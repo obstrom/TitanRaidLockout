@@ -11,7 +11,7 @@ This addon requires [Titan Panel Classic](https://www.curseforge.com/wow/addons/
 
 ### Manual install
 To install the latest version directly from this Github Repo.
-1. Download the repo code as a zip file.
+1. Download the [master repository code as a zip file](https://github.com/obstrom/TitanRaidLockout/archive/master.zip).
 2. Extract the root folder and rename it "TitanRaidLockout".
 3. Place the folder in your addons folder ```...\World of Warcraft\_classic_\Interface\AddOns```
 
