@@ -6,11 +6,11 @@
 			<Button name="TitanPanelTitanRaidLockoutButton" inherits="TitanPanelComboTemplate" frameStrata="FULLSCREEN" toplevel="true">
 				<Scripts>
 					<OnLoad>
-						TRL_OnLoad(self);
+						TRaidLockout_OnLoad(self);
 						TitanPanelButton_OnLoad(self);
 					</OnLoad>
 					<OnEvent>
-				        TRL_OnEvent(self, event, ...);
+				        TRaidLockout_OnEvent(self, event, ...);
 					</OnEvent>
 				</Scripts>
 			</Button>
