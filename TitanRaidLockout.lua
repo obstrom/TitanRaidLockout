@@ -7,7 +7,6 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
 local VERSION = GetAddOnMetadata(GetAddOnInfo("name"), "Version")
-local initTime = time()+20
 
 function TRaidLockout_Init()
     if (myAddOnsFrame_Register) then
@@ -21,23 +20,26 @@ function TRaidLockout_OnLoad(self)
         menuText = "Raid Lockout",
         buttonTextFunction = "TRaidLockout_GetButtonText",
         tooltipTitle = "Raid Lockout",
-        tooltipTextFunction = "TRaidLockout_SetTooltip",
+        tooltipTextFunction = "TRaidLockout_GetTooltip",
         icon = "Interface\\Icons\\inv_misc_head_dragon_bronze",
         iconWidth = 16,
         iconButtonWidth = 16,
         category = "Information",
         version = VERSION,
         savedVariables = {
-            ShowTooltipHeader = 1,
-            ShowUnlockedButton = 0,
-            ShowUnlockedTooltip = 0,
-            ShowIcon = 1,
-            ShowColoredText = 1,
-            ShowLabelText = 1,
+            ShowTooltipHeader = true,
+            ShowUnlockedButton = false,
+            ShowUnlockedTooltip = false,
+            ShowIcon = true,
+            ShowColoredText = true,
+            ShowLabelText = true,
         }
     };
-    self:RegisterEvent("VARIABLES_LOADED");
+    self:RegisterEvent("VARIABLES_LOADED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD") 
+    self:RegisterEvent("UPDATE_INSTANCE_INFO")
+    
+    TitanPanelButton_OnLoad(self)
 end
 
 function TRaidLockout_OnEvent(self, event, ...)
@@ -45,29 +47,29 @@ function TRaidLockout_OnEvent(self, event, ...)
 		TRaidLockout_Init();
     elseif (event == "UPDATE_INSTANCE_INFO") then
         initTime = time()+20
-        TRaidLockout_UpdateButtonText()
-        TRaidLockout_UpdateTooltip()
+        TRaidLockout_GetButtonText()
+        TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
     elseif (event == "PLAYER_ENTERING_WORLD") then
         initTime = time()+20
-        TRaidLockout_UpdateButtonText()
-        TRaidLockout_UpdateTooltip()
+        TRaidLockout_GetButtonText()
+        TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
     end
 end
 
 function TRaidLockout_GetButtonText()
-    TRaidLockout_UpdateButtonText()
+    TRaidLockout_SetButtonText()
     return buttonLabel, buttonText
 end
 
-function TRaidLockout_SetTooltip()
-    TRaidLockout_UpdateTooltip()
+function TRaidLockout_GetTooltip()
+    TRaidLockout_SetTooltip()
     return tooltipText
 end
 
 function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_RAIDLOCKOUT_ID].menuText);
     TitanPanelRightClickMenu_AddToggleVar("Tooltip Legend", TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
-    TitanPanelRightClickMenu_AddToggleVar("Bar, Locked and Unlocked", TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
+    TitanPanelRightClickMenu_AddToggleVar("Panel - Show all instances", TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     --TitanPanelRightClickMenu_AddToggleVar("Tooltip, Locked and Unlocked", TRaidLockout_ID, "ShowUnlockedTooltip")
     TitanPanelRightClickMenu_AddSpacer();
     TitanPanelRightClickMenu_AddToggleVar("Show Icon", TITAN_RAIDLOCKOUT_ID, "ShowIcon")
@@ -78,9 +80,10 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 end
 
 -- **************************************************************************
-function TRaidLockout_UpdateButtonText()
+function TRaidLockout_SetButtonText()
     
     local numSaved = GetNumSavedInstances()
+    
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     buttonLabel = "Lockout: "
@@ -109,6 +112,7 @@ function TRaidLockout_UpdateButtonText()
             for savedIndex = 1, numSaved do
 
                 local name = GetSavedInstanceInfo(savedIndex)
+                
                 if name == "Zul'Gurub" then
                     buttonText = buttonText .. " ZG"
                     raidsTable["ZG"] = nil
@@ -135,7 +139,7 @@ function TRaidLockout_UpdateButtonText()
         if coloredText then
             buttonText = buttonText .. GREEN_FONT_COLOR_CODE
         else
-            buttonText = buttonText .. "| UL:"
+            buttonText = buttonText .. " |"
         end
         
         for abbr, raidName in pairs(raidsTable) do
@@ -149,6 +153,7 @@ function TRaidLockout_UpdateButtonText()
             for savedIndex = 1, numSaved do
 
                 local name = GetSavedInstanceInfo(savedIndex)
+                
                 if name == "Zul'Gurub" then
                     buttonText = buttonText .. " ZG"
                 elseif name == "Molten Core" then
@@ -167,12 +172,12 @@ function TRaidLockout_UpdateButtonText()
         end
         
     end
-    
+        
 end
 
 -- **************************************************************************
-function TRaidLockout_UpdateTooltip()
-        
+function TRaidLockout_SetTooltip()
+            
 	tooltipText = ""
     local numSaved = GetNumSavedInstances()
     local showHeader = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
@@ -194,8 +199,11 @@ function TRaidLockout_UpdateTooltip()
         for savedIndex = 1, numSaved do
 
             local name, _, reset, _, _, _, _, _, _, _, numEncounters, encounterProgress, _ = GetSavedInstanceInfo(savedIndex)
-            --local timeReset = initTime + reset
-            local timeReset = reset + time()
+            
+            local timeToReset = reset + time()
+            local dateTable = date("*t", timeToReset)
+            dateTable["min"] = 0
+            local dateToReset = date("%a %d/%m %H:%M", time(dateTable))
 
             local progress = ""
 
@@ -205,7 +213,9 @@ function TRaidLockout_UpdateTooltip()
                 progress = progress .. "|cFFFFF244" .. encounterProgress
             end
 
-            tooltipText = tooltipText .. "|cFFDE1010" .. name .. "|cFFFFFFFF [" .. progress .. "|cFFFFF244/" .. numEncounters .. "|cFFFFFFFF]|cFFFFF244 - " .. tostring(date("%a %d/%m %H:%M", timeReset)) .. "\n" 
+            tooltipText = tooltipText .. "|cFFDE1010" .. name .. "|cFFFFFFFF [" .. progress .. "|cFFFFF244/" .. numEncounters .. "|cFFFFFFFF]|cFFFFF244 - " .. dateToReset .. "\n"
+            
+            dateToReset = nil
 
         end
     end
