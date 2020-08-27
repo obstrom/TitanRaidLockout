@@ -1,3 +1,7 @@
+#### v1.0.0
+
+- Release build
+
 #### v0.93-prerelease
 
 - Bugfix: Lockout only updated on UI-reload or load-screen

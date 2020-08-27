@@ -70,7 +70,6 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_RAIDLOCKOUT_ID].menuText);
     TitanPanelRightClickMenu_AddToggleVar("Tooltip Legend", TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
     TitanPanelRightClickMenu_AddToggleVar("Panel - Show all instances", TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
-    --TitanPanelRightClickMenu_AddToggleVar("Tooltip, Locked and Unlocked", TRaidLockout_ID, "ShowUnlockedTooltip")
     TitanPanelRightClickMenu_AddSpacer();
     TitanPanelRightClickMenu_AddToggleVar("Show Icon", TITAN_RAIDLOCKOUT_ID, "ShowIcon")
     TitanPanelRightClickMenu_AddToggleColoredText(TITAN_RAIDLOCKOUT_ID)
@@ -181,7 +180,6 @@ function TRaidLockout_SetTooltip()
 	tooltipText = ""
     local numSaved = GetNumSavedInstances()
     local showHeader = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
-    --local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedTooltip")
     local headerText = ""
     
     if showHeader then
