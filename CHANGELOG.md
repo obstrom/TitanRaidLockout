@@ -1,3 +1,7 @@
+#### v1.0.1
+
+- Bugfix: Addon tried to hook into Titan Panel twice during login, causing a error message to display from Titan Panel
+
 #### v1.0.0
 
 - Release build
