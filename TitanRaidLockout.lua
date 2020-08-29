@@ -14,7 +14,7 @@ function TRaidLockout_Init()
 	end
 end
 
-function TRaidLockout_OnLoad(self)
+function TRaidLockout_OnLoad(self)    
     self.registry = {
         id = TITAN_RAIDLOCKOUT_ID,
         menuText = "Raid Lockout",
@@ -38,8 +38,6 @@ function TRaidLockout_OnLoad(self)
     self:RegisterEvent("VARIABLES_LOADED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD") 
     self:RegisterEvent("UPDATE_INSTANCE_INFO")
-    
-    TitanPanelButton_OnLoad(self)
 end
 
 function TRaidLockout_OnEvent(self, event, ...)
