@@ -240,7 +240,7 @@ function TRaidLockout_SetTooltip()
                 progress = progress .. COLOR.yellow .. encounterProgress
             end
 
-            tooltipText = tooltipText .. COLOR.red .. name .. COLOR.white " [" .. progress .. COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " - " .. dateToReset .. "\n"
+            tooltipText = tooltipText .. COLOR.red .. name .. COLOR.white .. " [" .. progress .. COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " - " .. dateToReset .. "\n"
             
             dateToReset = nil
 
