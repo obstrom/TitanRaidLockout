@@ -5,8 +5,6 @@
 -- **************************************************************************
 
 -- Constants
-local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
-local addonName, L = ...;
 local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
 local VERSION = GetAddOnMetadata(GetAddOnInfo(TITAN_RAIDLOCKOUT_ID), "Version")
 local COLOR = {
@@ -16,6 +14,8 @@ local COLOR = {
     ["green"] = GREEN_FONT_COLOR_CODE,
     ["yellow"] = "|cFFFFF244",
 }
+
+local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
 -- **************************************************************************
 --  Addon setup and Titan Panel integration
@@ -32,7 +32,7 @@ function TRaidLockout_OnLoad(self)
         id = TITAN_RAIDLOCKOUT_ID,
         menuText = "Raid Lockout",
         buttonTextFunction = "TRaidLockout_GetButtonText",
-        tooltipTitle = "Raid Lockout",
+        tooltipTitle = L["Raid Lockout"],
         tooltipTextFunction = "TRaidLockout_GetTooltip",
         icon = "Interface\\Icons\\inv_misc_head_dragon_bronze",
         iconWidth = 16,
@@ -83,10 +83,10 @@ end]]--
 
 function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_RAIDLOCKOUT_ID].menuText);
-    TitanPanelRightClickMenu_AddToggleVar("Tooltip Legend", TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
-    TitanPanelRightClickMenu_AddToggleVar("Panel - Show all instances", TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
+    TitanPanelRightClickMenu_AddToggleVar(L["Tooltip Legend"], TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
+    TitanPanelRightClickMenu_AddToggleVar(L["Panel - Show all instances"], TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     TitanPanelRightClickMenu_AddSpacer();
-    TitanPanelRightClickMenu_AddToggleVar("Show Icon", TITAN_RAIDLOCKOUT_ID, "ShowIcon")
+    TitanPanelRightClickMenu_AddToggleIcon(TITAN_RAIDLOCKOUT_ID);
     TitanPanelRightClickMenu_AddToggleColoredText(TITAN_RAIDLOCKOUT_ID)
 	TitanPanelRightClickMenu_AddToggleLabelText(TITAN_RAIDLOCKOUT_ID)
     TitanPanelRightClickMenu_AddSpacer();
@@ -102,7 +102,7 @@ function TRaidLockout_SetButtonText()
     
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
-    buttonLabel = "Lockout: "
+    buttonLabel = L["Lockout: "]
     
     if coloredText then
         textColor = COLOR.red
@@ -122,30 +122,30 @@ function TRaidLockout_SetButtonText()
             ["AQ20"] = L["Ruins of Ahn'Qiraj"],
             ["AQ40"] = L["Ahn'Qiraj"],
         }
-
+        
         if numSaved > 0 then
             -- Add locked instance abbriviations to button text
             for savedIndex = 1, numSaved do
 
                 local name = GetSavedInstanceInfo(savedIndex)
 
-                if name == "Zul'Gurub" then
-                    buttonText = buttonText .. " ZG"
+                if name == L["Zul'Gurub"] then
+                    buttonText = buttonText .. " " .. L["ZG"]
                     raidsTable["ZG"] = nil
-                elseif name == "Molten Core" then
-                    buttonText = buttonText .. " MC"
+                elseif name == L["Molten Core"] then
+                    buttonText = buttonText .. " " .. L["MC"]
                     raidsTable["MC"] = nil
-                elseif name == "Blackwing Lair" then
-                    buttonText = buttonText .. " BWL"
+                elseif name == L["Blackwing Lair"] then
+                    buttonText = buttonText .. " " .. L["BWL"]
                     raidsTable["BWL"] = nil
-                elseif name == "Onyxia's Lair" then
-                    buttonText = buttonText .. " ONY"
+                elseif name == L["Onyxia's Lair"] then
+                    buttonText = buttonText .. " " .. L["ONY"]
                     raidsTable["ONY"] = nil
-                elseif name == "Ruins of Ahn'Qiraj" then
-                    buttonText = buttonText .. " AQ20"
+                elseif name == L["Ruins of Ahn'Qiraj"] then
+                    buttonText = buttonText .. " " .. L["AQ20"]
                     raidsTable["AQ20"] = nil
-                elseif name == "Ahn'Qiraj" then
-                    buttonText = buttonText .. " AQ40"
+                elseif name == L["Ahn'Qiraj"] then
+                    buttonText = buttonText .. " " .. L["AQ40"]
                     raidsTable["AQ40"] = nil
                 end
 
@@ -160,17 +160,7 @@ function TRaidLockout_SetButtonText()
         end
         
         for abbr, raidName in pairs(raidsTable) do
-            buttonText = buttonText .. " " .. abbr
-        end
-        
-        if coloredText then
-            buttonText = buttonText .. COLOR.green
-        else
-            buttonText = buttonText .. " |"
-        end
-        
-        for abbr, raidName in pairs(raidsTable) do
-            buttonText = buttonText .. " " .. abbr
+            buttonText = buttonText .. " " .. L[abbr]
         end
     
     else
@@ -182,17 +172,17 @@ function TRaidLockout_SetButtonText()
                 local name = GetSavedInstanceInfo(savedIndex)
 
                 if name == L["Zul'Gurub"] then
-                    buttonText = buttonText .. " ZG"
+                    buttonText = buttonText .. " " .. L["ZG"]
                 elseif name == L["Molten Core"] then
-                    buttonText = buttonText .. " MC"
+                    buttonText = buttonText .. " " .. L["MC"]
                 elseif name == L["Blackwing Lair"] then
-                    buttonText = buttonText .. " BWL"
+                    buttonText = buttonText .. " " .. L["BWL"]
                 elseif name == L["Onyxia's Lair"] then
-                    buttonText = buttonText .. " ONY"
+                    buttonText = buttonText .. " " .. L["ONY"]
                 elseif name == L["Ruins of Ahn'Qiraj"] then
-                    buttonText = buttonText .. " AQ20"
+                    buttonText = buttonText .. " " .. L["AQ20"]
                 elseif name == L["Ahn'Qiraj"] then
-                    buttonText = buttonText .. " AQ40"
+                    buttonText = buttonText .. " " .. L["AQ40"]
                 end
 
             end
@@ -213,14 +203,14 @@ function TRaidLockout_SetTooltip()
     local headerText = ""
     
     if showHeader then
-        headerText = headerText .. COLOR.grey .. "Instance Name [Bosses] - Reset Time\n"
+        headerText = headerText .. COLOR.grey .. L["Instance Name [Bosses] - Reset Time"] .. "\n"
     end
         
     tooltipText = tooltipText .. headerText
     
     if numSaved < 1 then
         
-        tooltipText = tooltipText .. COLOR.white .. "All raid instances are unlocked"
+        tooltipText = tooltipText .. COLOR.white .. L["All raid instances are unlocked"]
         
     else
         -- Add locked instances to tooltip
