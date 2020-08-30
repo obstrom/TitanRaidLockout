@@ -1,4 +1,4 @@
-L = ...;
+local _, L = ...;
 
 L["Zul'Gurub"] = "Zul'Gurub"
 L["Molten Core"] = "Molten Core"
