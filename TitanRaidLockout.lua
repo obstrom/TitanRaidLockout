@@ -331,27 +331,136 @@ function TRaidLockout_SetButtonText()
     
     else
         
-        if numSaved > 0 then
+        if ( clientLocale == "deDE" ) then
+        -- GERMAN
+            
+            if numSaved > 0 then
             -- Add locked instance abbriviations to button text
-            for savedIndex = 1, numSaved do
+                for savedIndex = 1, numSaved do
 
-                local name = GetSavedInstanceInfo(savedIndex)
-                
-                if name == "Zul'Gurub" then
-                    buttonText = buttonText .. " ZG"
-                elseif name == "Molten Core" then
-                    buttonText = buttonText .. " MC"
-                elseif name == "Blackwing Lair" then
-                    buttonText = buttonText .. " BWL"
-                elseif name == "Onyxia's Lair" then
-                    buttonText = buttonText .. " ONY"
-                elseif name == "Ruins of Ahn'Qiraj" then
-                    buttonText = buttonText .. " AQ20"
-                elseif name == "Ahn'Qiraj" then
-                    buttonText = buttonText .. " AQ40"
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                    elseif name == "Geschmolzener Kern" then
+                        buttonText = buttonText .. " MC"
+                    elseif name == "Pechschwingenhort" then
+                        buttonText = buttonText .. " BWL"
+                    elseif name == "Onyxias Hort" then
+                        buttonText = buttonText .. " ONY"
+                    elseif name == "Ruinen von Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                    end
+
                 end
-
             end
+            
+        elseif ( clientLocale == "esES" or clientLocale == "esMX" ) then
+        -- SPANISH
+            
+            if numSaved > 0 then
+            -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                    elseif name == "Núcleo de Magma" then
+                        buttonText = buttonText .. " MC"
+                    elseif name == "Guarida Alanegra" then
+                        buttonText = buttonText .. " BWL"
+                    elseif name == "Guarida de Onyxia" then
+                        buttonText = buttonText .. " ONY"
+                    elseif name == "Ruinas de Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                    end
+
+                end
+            end
+            
+        elseif ( clientLocale == "frFR" ) then
+        -- FRENCH
+            
+            if numSaved > 0 then
+            -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                    elseif name == "Cœur du Magma" then
+                        buttonText = buttonText .. " MC"
+                    elseif name == "Repaire de l'Aile noire" then
+                        buttonText = buttonText .. " BWL"
+                    elseif name == "Repaire d'Onyxia" then
+                        buttonText = buttonText .. " ONY"
+                    elseif name == "Ruines d'Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                    end
+
+                end
+            end
+            
+        elseif ( clientLocale == "ruRU" ) then
+        -- RUSSIAN
+            
+            if numSaved > 0 then
+            -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Зул'Гуруб" then
+                        buttonText = buttonText .. " ZG"
+                    elseif name == "Огненные Недра" then
+                        buttonText = buttonText .. " MC"
+                    elseif name == "Логово Крыла Тьмы" then
+                        buttonText = buttonText .. " BWL"
+                    elseif name == "Логово Ониксии" then
+                        buttonText = buttonText .. " ONY"
+                    elseif name == "Руины Ан'Киража" then
+                        buttonText = buttonText .. " AQ20"
+                    elseif name == "Ан'Кираж" then
+                        buttonText = buttonText .. " AQ40"
+                    end
+
+                end
+            end
+            
+        else
+        -- ENGLISH
+
+            if numSaved > 0 then
+                -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                    elseif name == "Molten Core" then
+                        buttonText = buttonText .. " MC"
+                    elseif name == "Blackwing Lair" then
+                        buttonText = buttonText .. " BWL"
+                    elseif name == "Onyxia's Lair" then
+                        buttonText = buttonText .. " ONY"
+                    elseif name == "Ruins of Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                    end
+
+                end
+            end
+            
         end
         
     end
