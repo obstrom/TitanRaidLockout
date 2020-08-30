@@ -7,6 +7,7 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
 local VERSION = GetAddOnMetadata(GetAddOnInfo("name"), "Version")
+local clientLocale = GetLocale()
 
 function TRaidLockout_Init()
     if (myAddOnsFrame_Register) then
@@ -77,6 +78,8 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 end
 
 -- **************************************************************************
+--  _SetButtonText()
+-- **************************************************************************
 function TRaidLockout_SetButtonText()
     
     local numSaved = GetNumSavedInstances()
@@ -95,42 +98,225 @@ function TRaidLockout_SetButtonText()
     
     if showUnlocked then
         
-        local raidsTable = {
-            ["ZG"] = "Zul'Gurub",
-            ["MC"] = "Molten Core",
-            ["BWL"] = "Blackwing Lair",
-            ["ONY"] = "Onyxia's Lair",
-            ["AQ20"] = "Ruins of Ahn'Qiraj",
-            ["AQ40"] = "Ahn'Qiraj",
-        }
+        -- Filter instance names depending on game client langauge
+        -- If the client is english or it's not listed it will return as english
+        -- Italian game client uses English names?
         
-        if numSaved > 0 then
-            -- Add locked instance abbriviations to button text
-            for savedIndex = 1, numSaved do
+        if ( clientLocale == "deDE" ) then
+        -- GERMAN
+            
+            local raidsTable = {
+                ["ZG"] = "Zul'Gurub",
+                ["MC"] = "Geschmolzener Kern",
+                ["BWL"] = "Pechschwingenhort",
+                ["ONY"] = "Onyxias Hort",
+                ["AQ20"] = "Ruinen von Ahn'Qiraj",
+                ["AQ40"] = "Ahn'Qiraj",
+            }
 
-                local name = GetSavedInstanceInfo(savedIndex)
-                
-                if name == "Zul'Gurub" then
-                    buttonText = buttonText .. " ZG"
-                    raidsTable["ZG"] = nil
-                elseif name == "Molten Core" then
-                    buttonText = buttonText .. " MC"
-                    raidsTable["MC"] = nil
-                elseif name == "Blackwing Lair" then
-                    buttonText = buttonText .. " BWL"
-                    raidsTable["BWL"] = nil
-                elseif name == "Onyxia's Lair" then
-                    buttonText = buttonText .. " ONY"
-                    raidsTable["ONY"] = nil
-                elseif name == "Ruins of Ahn'Qiraj" then
-                    buttonText = buttonText .. " AQ20"
-                    raidsTable["AQ20"] = nil
-                elseif name == "Ahn'Qiraj" then
-                    buttonText = buttonText .. " AQ40"
-                    raidsTable["AQ40"] = nil
+            if numSaved > 0 then
+                -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                        raidsTable["ZG"] = nil
+                    elseif name == "Geschmolzener Kern" then
+                        buttonText = buttonText .. " MC"
+                        raidsTable["MC"] = nil
+                    elseif name == "Pechschwingenhort" then
+                        buttonText = buttonText .. " BWL"
+                        raidsTable["BWL"] = nil
+                    elseif name == "Onyxias Hort" then
+                        buttonText = buttonText .. " ONY"
+                        raidsTable["ONY"] = nil
+                    elseif name == "Ruinen von Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                        raidsTable["AQ20"] = nil
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                        raidsTable["AQ40"] = nil
+                    end
+
                 end
-
             end
+            
+        elseif ( clientLocale == "esES" or clientLocale == "esMX" ) then
+        -- SPANISH
+            
+            local raidsTable = {
+                ["ZG"] = "Zul'Gurub",
+                ["MC"] = "Núcleo de Magma",
+                ["BWL"] = "Guarida Alanegra",
+                ["ONY"] = "Guarida de Onyxia",
+                ["AQ20"] = "Ruinas de Ahn'Qiraj",
+                ["AQ40"] = "Ahn'Qiraj",
+            }
+
+            if numSaved > 0 then
+                -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                        raidsTable["ZG"] = nil
+                    elseif name == "Núcleo de Magma" then
+                        buttonText = buttonText .. " MC"
+                        raidsTable["MC"] = nil
+                    elseif name == "Guarida Alanegra" then
+                        buttonText = buttonText .. " BWL"
+                        raidsTable["BWL"] = nil
+                    elseif name == "Guarida de Onyxia" then
+                        buttonText = buttonText .. " ONY"
+                        raidsTable["ONY"] = nil
+                    elseif name == "Ruinas de Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                        raidsTable["AQ20"] = nil
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                        raidsTable["AQ40"] = nil
+                    end
+
+                end
+            end
+            
+        elseif ( clientLocale == "frFR" ) then
+        -- FRENCH
+            
+            local raidsTable = {
+                ["ZG"] = "Zul'Gurub",
+                ["MC"] = "Cœur du Magma",
+                ["BWL"] = "Repaire de l'Aile noire",
+                ["ONY"] = "Repaire d'Onyxia",
+                ["AQ20"] = "Ruines d'Ahn'Qiraj",
+                ["AQ40"] = "Ahn'Qiraj",
+            }
+
+            if numSaved > 0 then
+                -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                        raidsTable["ZG"] = nil
+                    elseif name == "Cœur du Magma" then
+                        buttonText = buttonText .. " MC"
+                        raidsTable["MC"] = nil
+                    elseif name == "Repaire de l'Aile noire" then
+                        buttonText = buttonText .. " BWL"
+                        raidsTable["BWL"] = nil
+                    elseif name == "Repaire d'Onyxia" then
+                        buttonText = buttonText .. " ONY"
+                        raidsTable["ONY"] = nil
+                    elseif name == "Ruines d'Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                        raidsTable["AQ20"] = nil
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                        raidsTable["AQ40"] = nil
+                    end
+
+                end
+            end
+            
+        elseif ( clientLocale == "ruRU" ) then
+        -- RUSSIAN
+            
+            local raidsTable = {
+                ["ZG"] = "Зул'Гуруб",
+                ["MC"] = "Огненные Недра",
+                ["BWL"] = "Логово Крыла Тьмы",
+                ["ONY"] = "Логово Ониксии",
+                ["AQ20"] = "Руины Ан'Киража",
+                ["AQ40"] = "Ан'Кираж",
+            }
+
+            if numSaved > 0 then
+                -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Зул'Гуруб" then
+                        buttonText = buttonText .. " ZG"
+                        raidsTable["ZG"] = nil
+                    elseif name == "Огненные Недра" then
+                        buttonText = buttonText .. " MC"
+                        raidsTable["MC"] = nil
+                    elseif name == "Логово Крыла Тьмы" then
+                        buttonText = buttonText .. " BWL"
+                        raidsTable["BWL"] = nil
+                    elseif name == "Логово Ониксии" then
+                        buttonText = buttonText .. " ONY"
+                        raidsTable["ONY"] = nil
+                    elseif name == "Руины Ан'Киража" then
+                        buttonText = buttonText .. " AQ20"
+                        raidsTable["AQ20"] = nil
+                    elseif name == "Ан'Кираж" then
+                        buttonText = buttonText .. " AQ40"
+                        raidsTable["AQ40"] = nil
+                    end
+
+                end
+            end
+            
+        else
+        -- ENGLISH
+        
+            local raidsTable = {
+                ["ZG"] = "Zul'Gurub",
+                ["MC"] = "Molten Core",
+                ["BWL"] = "Blackwing Lair",
+                ["ONY"] = "Onyxia's Lair",
+                ["AQ20"] = "Ruins of Ahn'Qiraj",
+                ["AQ40"] = "Ahn'Qiraj",
+            }
+
+            if numSaved > 0 then
+                -- Add locked instance abbriviations to button text
+                for savedIndex = 1, numSaved do
+
+                    local name = GetSavedInstanceInfo(savedIndex)
+
+                    if name == "Zul'Gurub" then
+                        buttonText = buttonText .. " ZG"
+                        raidsTable["ZG"] = nil
+                    elseif name == "Molten Core" then
+                        buttonText = buttonText .. " MC"
+                        raidsTable["MC"] = nil
+                    elseif name == "Blackwing Lair" then
+                        buttonText = buttonText .. " BWL"
+                        raidsTable["BWL"] = nil
+                    elseif name == "Onyxia's Lair" then
+                        buttonText = buttonText .. " ONY"
+                        raidsTable["ONY"] = nil
+                    elseif name == "Ruins of Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ20"
+                        raidsTable["AQ20"] = nil
+                    elseif name == "Ahn'Qiraj" then
+                        buttonText = buttonText .. " AQ40"
+                        raidsTable["AQ40"] = nil
+                    end
+
+                end
+            end
+        
+        end
+        
+        if coloredText then
+            buttonText = buttonText .. GREEN_FONT_COLOR_CODE
+        else
+            buttonText = buttonText .. " |"
+        end
+        
+        for abbr, raidName in pairs(raidsTable) do
+            buttonText = buttonText .. " " .. abbr
         end
         
         if coloredText then
@@ -172,6 +358,8 @@ function TRaidLockout_SetButtonText()
         
 end
 
+-- **************************************************************************
+--  _SetTooltip()
 -- **************************************************************************
 function TRaidLockout_SetTooltip()
             
