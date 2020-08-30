@@ -8,7 +8,7 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 local addonName, L = ...;
 local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
-local VERSION = GetAddOnMetadata(GetAddOnInfo("name"), "Version")
+local VERSION = GetAddOnMetadata(GetAddOnInfo(TITAN_RAIDLOCKOUT_ID), "Version")
 local COLOR = {
     ["white"] = "|cFFFFFFFF",
     ["grey"] = "|cFFA9A9A9",
