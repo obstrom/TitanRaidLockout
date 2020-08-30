@@ -4,10 +4,21 @@
 -- * By: Gamut - Nethergarde Keep EU
 -- **************************************************************************
 
+-- Constants
 local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
 local VERSION = GetAddOnMetadata(GetAddOnInfo("name"), "Version")
-local clientLocale = GetLocale()
+local COLOR = {
+    ["white"] = "|cFFFFFFFF"
+    ["grey"] = "|cFFA9A9A9"
+    ["red"] = "|cFFDE1010"
+    ["green"] = GREEN_FONT_COLOR_CODE
+    ["yellow"] = "|cFFFFF244"
+}
+
+-- **************************************************************************
+--  Addon setup and Titan Panel integration
+-- **************************************************************************
 
 function TRaidLockout_Init()
     if (myAddOnsFrame_Register) then
@@ -65,6 +76,10 @@ function TRaidLockout_GetTooltip()
     return tooltipText
 end
 
+--[[function TRaidLockout_OnClick(self, button)
+    -- Find a way to open raid info panel - like /raidinfo
+end]]--
+
 function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_RAIDLOCKOUT_ID].menuText);
     TitanPanelRightClickMenu_AddToggleVar("Tooltip Legend", TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
@@ -89,9 +104,9 @@ function TRaidLockout_SetButtonText()
     buttonLabel = "Lockout: "
     
     if coloredText then
-        textColor = "|cFFDE1010"
+        textColor = COLOR.red
     else
-        textColor = "|cFFFFFFFF"
+        textColor = COLOR.white
     end
     
     buttonText = textColor
@@ -138,7 +153,7 @@ function TRaidLockout_SetButtonText()
         
 
         if coloredText then
-            buttonText = buttonText .. GREEN_FONT_COLOR_CODE
+            buttonText = buttonText .. COLOR.green
         else
             buttonText = buttonText .. " |"
         end
@@ -148,7 +163,7 @@ function TRaidLockout_SetButtonText()
         end
         
         if coloredText then
-            buttonText = buttonText .. GREEN_FONT_COLOR_CODE
+            buttonText = buttonText .. COLOR.green
         else
             buttonText = buttonText .. " |"
         end
@@ -197,14 +212,14 @@ function TRaidLockout_SetTooltip()
     local headerText = ""
     
     if showHeader then
-        headerText = headerText .. "|cFFA9A9A9Instance Name [Bosses] - Reset Time\n"
+        headerText = headerText .. COLOR.grey .. "Instance Name [Bosses] - Reset Time\n"
     end
         
     tooltipText = tooltipText .. headerText
     
     if numSaved < 1 then
         
-        tooltipText = tooltipText .. "|cFFFFFFFFAll raid instances are unlocked"
+        tooltipText = tooltipText .. COLOR.white .. "All raid instances are unlocked"
         
     else
         -- Add locked instances to tooltip
@@ -220,12 +235,12 @@ function TRaidLockout_SetTooltip()
             local progress = ""
 
             if ( encounterProgress < numEncounters ) then
-                progress = progress .. "|cFF3DDC53" .. encounterProgress
+                progress = progress .. COLOR.green .. encounterProgress
             else
-                progress = progress .. "|cFFFFF244" .. encounterProgress
+                progress = progress .. COLOR.yellow .. encounterProgress
             end
 
-            tooltipText = tooltipText .. "|cFFDE1010" .. name .. "|cFFFFFFFF [" .. progress .. "|cFFFFF244/" .. numEncounters .. "|cFFFFFFFF]|cFFFFF244 - " .. dateToReset .. "\n"
+            tooltipText = tooltipText .. COLOR.red .. name .. COLOR.white " [" .. progress .. COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " - " .. dateToReset .. "\n"
             
             dateToReset = nil
 
