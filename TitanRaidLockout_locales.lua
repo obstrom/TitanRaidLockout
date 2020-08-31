@@ -5,8 +5,6 @@ L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 -- Italian (itIT), Brazilian Portuguese (ptBR), Korean (koKR), Simp. Chinese (zhCN), Trad. Chinese (zhTW)
 
 -- Addon menu text
-L["Raid Lockout"] = "Raid Lockout" -- Title
-L["Information"] = "Information" -- Titan Panel Category
 L["Tooltip Legend"] = "Tooltip Legend" -- Settings menu option
 L["Panel - Show all instances"] = "Panel - Show all instances" -- Settings menu option
 L["TITAN_PANEL_MENU_HIDE"] = "Hide" -- Settings menu option
