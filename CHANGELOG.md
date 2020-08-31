@@ -1,3 +1,11 @@
+#### v1.0.2
+
+- Bugfix: Fixed issue with addon not working properly for German, French, Spanish and Russian game clients. *NOTICE* Proper support is still missing for Italian, Portuguese, Korean and Chinese game clients.
+- Bugfix: Version number did not show properly in Titan Panel menu.
+- New feature: Left-click on the addon in Titan Panel to open the raid and raid info window (same as typing `/raidinfo`).
+- New feature: Added localization support. Translations can now also be added to the project on Github.
+- Misc: Better text alignment in tooltip.
+
 #### v1.0.1
 
 - Bugfix: Addon tried to hook into Titan Panel twice during login, causing a error message to display from Titan Panel
@@ -5,17 +13,3 @@
 #### v1.0.0
 
 - Release build
-
-#### v0.93-prerelease
-
-- Bugfix: Lockout only updated on UI-reload or load-screen
-- Bugfix: Lockout always displayed as zero after login
-- Bugfix: Reset datetime shifted several minutes incorrectly
-
-#### v0.92-prerelease
-
-- New feature: Added the option "Panel - Show all instances". It shows both locked (red) and unlocked (green) raid abbreviation in the panel view.
-
-#### v0.91-prerelease
-
-- Refactor: Rewrote the Titan Panel integration part of the code to not rely upon on a library.
