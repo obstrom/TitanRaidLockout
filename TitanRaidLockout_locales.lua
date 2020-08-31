@@ -34,6 +34,7 @@ if GetLocale() == "deDE" then
     L["Blackwing Lair"] = "Pechschwingenhort"
     L["Onyxia's Lair"] = "Onyxias Hort"
     L["Ruins of Ahn'Qiraj"] = "Ruinen von Ahn'Qiraj"
+    L["Ahn'Qiraj"] = "Tempel von Ahn'Qiraj"
 end
 
 if GetLocale() == "esES" or GetLocale() == "esMX" then
