@@ -4,6 +4,8 @@
 -- * By: Gamut - Nethergarde Keep EU
 -- **************************************************************************
 
+local addonName, addonTable = ...
+
 -- Constants
 local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
 local VERSION = GetAddOnMetadata(GetAddOnInfo(TITAN_RAIDLOCKOUT_ID), "Version")
@@ -37,7 +39,7 @@ function TRaidLockout_OnLoad(self)
         icon = "Interface\\Icons\\inv_misc_head_dragon_bronze",
         iconWidth = 16,
         iconButtonWidth = 16,
-        category = "Information",
+        category = L["Information"],
         version = VERSION,
         savedVariables = {
             ShowTooltipHeader = true,
@@ -57,11 +59,9 @@ function TRaidLockout_OnEvent(self, event, ...)
     if (event == "VARIABLES_LOADED") then
 		TRaidLockout_Init();
     elseif (event == "UPDATE_INSTANCE_INFO") then
-        initTime = time()+20
         TRaidLockout_GetButtonText()
         TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
     elseif (event == "PLAYER_ENTERING_WORLD") then
-        initTime = time()+20
         TRaidLockout_GetButtonText()
         TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
     end
@@ -77,9 +77,12 @@ function TRaidLockout_GetTooltip()
     return tooltipText
 end
 
---[[function TRaidLockout_OnClick(self, button)
-    -- Find a way to open raid info panel - like /raidinfo
-end]]--
+function TRaidLockoutButton_OnClick(self, button)
+    if button == "LeftButton" then
+        ToggleFriendsFrame(4)
+        RaidInfoFrame:Show()
+    end
+end
 
 function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_RAIDLOCKOUT_ID].menuText);
@@ -203,7 +206,7 @@ function TRaidLockout_SetTooltip()
     local headerText = ""
     
     if showHeader then
-        headerText = headerText .. COLOR.grey .. L["Instance Name [Bosses] - Reset Time"] .. "\n"
+        headerText = headerText .. COLOR.grey .. L["Instance Name [Bosses]"] .. "\t" .. COLOR.grey .. L["Reset Time"] .. "\n"
     end
         
     tooltipText = tooltipText .. headerText
@@ -231,7 +234,7 @@ function TRaidLockout_SetTooltip()
                 progress = progress .. COLOR.yellow .. encounterProgress
             end
 
-            tooltipText = tooltipText .. COLOR.red .. name .. COLOR.white .. " [" .. progress .. COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " - " .. dateToReset .. "\n"
+            tooltipText = tooltipText .. COLOR.red .. name .. COLOR.white .. " [" .. progress .. COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " \t " .. dateToReset .. "\n"
             
             dateToReset = nil
 

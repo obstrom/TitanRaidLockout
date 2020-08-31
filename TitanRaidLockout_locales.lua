@@ -1,3 +1,4 @@
+local _, addonTable = ...
 L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
 -- MISSING SUPPORT FOR:
@@ -5,11 +6,13 @@ L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
 -- Addon menu text
 L["Raid Lockout"] = "Raid Lockout" -- Title
+L["Information"] = "Information" -- Titan Panel Category
 L["Tooltip Legend"] = "Tooltip Legend" -- Settings menu option
 L["Panel - Show all instances"] = "Panel - Show all instances" -- Settings menu option
 L["TITAN_PANEL_MENU_HIDE"] = "Hide" -- Settings menu option
 L["Lockout: "] = "Lockout: " -- Panel label text
-L["Instance Name [Bosses] - Reset Time"] = "Instance Name [Bosses] - Reset Time" -- Tooltip legend hint
+L["Instance Name [Bosses]"] = "Instance Name [Bosses]" -- Tooltip legend hint
+L["Reset Time"] = "Reset Time" -- Tooltip legend hint
 L["All raid instances are unlocked"] = "All raid instances are unlocked" -- Tooltip
 
 -- Instance names
