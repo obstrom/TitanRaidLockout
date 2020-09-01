@@ -1,3 +1,8 @@
+#### v1.0.3-dev
+
+- Bugfix: German localization of AQ40 was wrong and causing the abbreviation of AQ40 not to show correctly in red on lockout.
+- Misc: Code refactor
+
 #### v1.0.2
 
 - Bugfix: Fixed issue with addon not working properly for German, French, Spanish and Russian game clients. *NOTICE* Proper support is still missing for Italian, Portuguese, Korean and Chinese game clients.
