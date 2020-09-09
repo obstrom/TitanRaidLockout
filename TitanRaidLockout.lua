@@ -102,15 +102,13 @@ end
 function TRaidLockout_SetButtonText()
     
     local numSaved = GetNumSavedInstances()
-    
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     buttonLabel = L["Lockout: "]
-    
     buttonText = TitanUtils_Ternary(coloredText, COLOR.red, COLOR.white)
     
      local raidsTable = { 
-        -- key, { localized name, localized abbr, is locked }
+        -- key, subTable{ localized name, localized abbr, is locked }
         ["ZG"] = { L["Zul'Gurub"], L["ZG"], false },
         ["MC"] = { L["Molten Core"], L["MC"], false },
         ["BWL"] = { L["Blackwing Lair"], L["BWL"], false },
@@ -123,40 +121,33 @@ function TRaidLockout_SetButtonText()
         
         if numSaved > 0 then
             for savedIndex = 1, numSaved do
-
                 local name = GetSavedInstanceInfo(savedIndex)
-                                
+                
                 for index, subTable in pairs(raidsTable) do
-                    
                     if name == subTable[1] then
                         buttonText = buttonText .. " " .. subTable[2]
                         subTable[3] = true
                     end
                 end
-                
             end
         end
         
         buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |") 
         
-        for index, subTable in pairs(raidsTable) do          
+        for index, subTable in pairs(raidsTable) do
             if not subTable[3] then buttonText = buttonText .. " " .. subTable[2] end 
         end
     
     else -- Don't show green abbr
-        
         if numSaved > 0 then
             for savedIndex = 1, numSaved do
-
                 local name = GetSavedInstanceInfo(savedIndex)
                 
                 for index, subTable in pairs(raidsTable) do 
                     if name == subTable[1] then buttonText = buttonText .. " " .. subTable[2] end  
                 end
-       
             end
         end
-        
     end
         
 end
@@ -179,7 +170,7 @@ function TRaidLockout_SetTooltip()
     
     if numSaved < 1 then
         
-        tooltipText = tooltipText .. COLOR.white .. L["All raid instances are unlocked"]
+        tooltipText = tooltipText .. COLOR.green .. L["All raid instances are unlocked"]
         
     else
         for savedIndex = 1, numSaved do
