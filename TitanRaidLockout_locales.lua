@@ -19,7 +19,7 @@ L["Molten Core"] = "Molten Core"
 L["Blackwing Lair"] = "Blackwing Lair"
 L["Onyxia's Lair"] = "Onyxia's Lair"
 L["Ruins of Ahn'Qiraj"] = "Ruins of Ahn'Qiraj"
-L["Ahn'Qiraj"] = "Ahn'Qiraj"
+L["Ahn'Qiraj"] = "Ahn'Qiraj Temple"
 
 -- Instance abbreviations
 L["ZG"] = "ZG" --Zul'Gurub
