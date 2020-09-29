@@ -133,8 +133,8 @@ function TRaidLockout_SetButtonText()
                 
                 for key, subTable in pairs(raidsTable) do
                     if name == localizedRaidName[key] then
-                        buttonText = buttonText .. " " .. subTable[2]
-                        subTable[3] = true
+                        buttonText = buttonText .. " " .. subTable[1]
+                        subTable[2] = true
                     end
                 end
             end
@@ -143,7 +143,7 @@ function TRaidLockout_SetButtonText()
         buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |") 
         
         for index, subTable in pairs(raidsTable) do
-            if not subTable[3] then buttonText = buttonText .. " " .. subTable[2] end 
+            if not subTable[2] then buttonText = buttonText .. " " .. subTable[1] end 
         end
     
     else -- Don't show green abbr
@@ -152,7 +152,7 @@ function TRaidLockout_SetButtonText()
                 local name = GetSavedInstanceInfo(savedIndex)
                 
                 for key, subTable in pairs(raidsTable) do 
-                    if name == localizedRaidName[key] then buttonText = buttonText .. " " .. subTable[2] end  
+                    if name == localizedRaidName[key] then buttonText = buttonText .. " " .. subTable[1] end  
                 end
             end
         end
