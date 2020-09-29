@@ -1,7 +1,7 @@
 **Raid Lockout is a tiny raid info module for Titan Panel Classic**
 
 See at a glance if you are locked for any raid instance and when it resets - directly in Titan Panel.
-![Example image](http://obstrom.com/raidlockout/readme1.jpg)
+![Example image](http://obstrom.com/github/raidlockout/readme1.jpg)
 
 ## Installation
 ### Notice
