@@ -35,7 +35,7 @@ Want to assist in translating this addon for your language? Contribute using the
 Translation strings can be found in [TitanRaidLockout_locales.lua](https://github.com/obstrom/TitanRaidLockout/blob/master/TitanRaidLockout_locales.lua).
 
 ## Feedback
-If you play on Nethergarde Keep EU - Aliance feel free to send a /w to Gamut
+If you play on Nethergarde Keep EU - Alliance feel free to send a /w to Gamut
 ### Bug Reports and Feature Requests
 Please submit bug reports and feature requests using the [GitHub issue tracker](https://github.com/obstrom/TitanRaidLockout/issues).
   
