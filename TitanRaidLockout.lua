@@ -100,7 +100,15 @@ end
 --  _SetButtonText()
 -- **************************************************************************
 function TRaidLockout_SetButtonText()
-    
+        
+    local localizedRaidName = {
+        ["ONY"] = GetRealZoneText(249),
+        ["ZG"] = GetRealZoneText(309),
+        ["MC"] = GetRealZoneText(409),
+        ["BWL"] = GetRealZoneText(469),
+        ["AQ20"] = GetRealZoneText(509),
+        ["AQ40"] = GetRealZoneText(531),
+    }
     local numSaved = GetNumSavedInstances()
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
@@ -108,13 +116,13 @@ function TRaidLockout_SetButtonText()
     buttonText = TitanUtils_Ternary(coloredText, COLOR.red, COLOR.white)
     
      local raidsTable = { 
-        -- key, subTable{ localized name, localized abbr, is locked }
-        ["ZG"] = { L["Zul'Gurub"], L["ZG"], false },
-        ["MC"] = { L["Molten Core"], L["MC"], false },
-        ["BWL"] = { L["Blackwing Lair"], L["BWL"], false },
-        ["ONY"] = { L["Onyxia's Lair"], L["ONY"], false },
-        ["AQ20"] = { L["Ruins of Ahn'Qiraj"], L["AQ20"], false },
-        ["AQ40"] = { L["Ahn'Qiraj"], L["AQ40"], false }
+        -- key, subTable{ localized abbr, is locked }
+        ["ZG"] = { L["ZG"], false },
+        ["MC"] = { L["MC"], false },
+        ["BWL"] = { L["BWL"], false },
+        ["ONY"] = { L["ONY"], false },
+        ["AQ20"] = { L["AQ20"], false },
+        ["AQ40"] = { L["AQ40"], false },
     }
         
     if showUnlocked then -- Show green abbr
@@ -123,8 +131,8 @@ function TRaidLockout_SetButtonText()
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
                 
-                for index, subTable in pairs(raidsTable) do
-                    if name == subTable[1] then
+                for key, subTable in pairs(raidsTable) do
+                    if name == localizedRaidName[key] then
                         buttonText = buttonText .. " " .. subTable[2]
                         subTable[3] = true
                     end
@@ -143,8 +151,8 @@ function TRaidLockout_SetButtonText()
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
                 
-                for index, subTable in pairs(raidsTable) do 
-                    if name == subTable[1] then buttonText = buttonText .. " " .. subTable[2] end  
+                for key, subTable in pairs(raidsTable) do 
+                    if name == localizedRaidName[key] then buttonText = buttonText .. " " .. subTable[2] end  
                 end
             end
         end
@@ -156,7 +164,7 @@ end
 --  _SetTooltip()
 -- **************************************************************************
 function TRaidLockout_SetTooltip()
-            
+             
 	tooltipText = ""
     local numSaved = GetNumSavedInstances()
     local showHeader = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")

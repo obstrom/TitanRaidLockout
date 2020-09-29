@@ -1,9 +1,6 @@
 local _, addonTable = ...
 L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
--- MISSING SUPPORT FOR:
--- Italian (itIT), Brazilian Portuguese (ptBR), Korean (koKR), Simp. Chinese (zhCN), Trad. Chinese (zhTW)
-
 -- Addon menu text
 L["Tooltip Legend"] = "Tooltip Legend" -- Settings menu option
 L["Panel - Show all instances"] = "Panel - Show all instances" -- Settings menu option
@@ -30,32 +27,37 @@ L["AQ20"] = "AQ20" --Ruins of Ahn'Qiraj
 L["AQ40"] = "AQ40" --Ahn'Qiraj
 
 if GetLocale() == "deDE" then
-    L["Molten Core"] = "Geschmolzener Kern"
-    L["Blackwing Lair"] = "Pechschwingenhort"
-    L["Onyxia's Lair"] = "Onyxias Hort"
-    L["Ruins of Ahn'Qiraj"] = "Ruinen von Ahn'Qiraj"
-    L["Ahn'Qiraj"] = "Tempel von Ahn'Qiraj"
+    -- German localization here
 end
 
 if GetLocale() == "esES" or GetLocale() == "esMX" then
-    L["Molten Core"] = "Núcleo de Magma"
-    L["Blackwing Lair"] = "Guarida Alanegra"
-    L["Onyxia's Lair"] = "Guarida de Onyxia"
-    L["Ruins of Ahn'Qiraj"] = "Ruinas de Ahn'Qiraj"
+    -- Spanish localization here
 end
 
 if GetLocale() == "frFR" then
-    L["Molten Core"] = "Cœur du Magma"
-    L["Blackwing Lair"] = "Repaire de l'Aile noire"
-    L["Onyxia's Lair"] = "Repaire d'Onyxia"
-    L["Ruins of Ahn'Qiraj"] = "Ruines d'Ahn'Qiraj"
+    -- French localization here
 end
 
 if GetLocale() == "ruRU" then
-    L["Zul'Gurub"] = "Зул'Гуруб"
-    L["Molten Core"] = "Огненные Недра"
-    L["Blackwing Lair"] = "Логово Крыла Тьмы"
-    L["Onyxia's Lair"] = "Логово Ониксии"
-    L["Ruins of Ahn'Qiraj"] = "Руины Ан'Киража"
-    L["Ahn'Qiraj"] = "Ан'Кираж"
+    -- Russian localization here
+end
+
+if GetLocale() == "itIT" then
+    -- Italian localization here
+end
+
+if GetLocale() == "koKR" then
+    -- Korean localization here
+end
+
+if GetLocale() == "ptBR" then
+    -- Portuguese (Brazil) localization here
+end
+
+if GetLocale() == "zhCN" then
+    -- Simplified Chinese (PRC) localization here
+end
+
+if GetLocale() == "zhTW" then
+    -- Traditional Chinese (Taiwan) localization here
 end
