@@ -5,14 +5,14 @@ See at a glance if you are locked for any raid instance and when it resets - dir
 
 ## Installation
 ### Notice
-This addon requires [Titan Panel Classic](https://www.curseforge.com/wow/addons/titan-panel-classic) to run.
+:warning: This addon requires [Titan Panel Classic](https://www.curseforge.com/wow/addons/titan-panel-classic) to run, and is only compatible with Classic. 
 
-You can also download this addon directly from [Curseforge](https://www.curseforge.com/wow/addons/titan-panel-classic-raid-lockout) or the Twitch app.
+You can also download this addon directly from [Curseforge](https://www.curseforge.com/wow/addons/titan-panel-classic-raid-lockout) or the Twitch desktop app.
 
-### Manual install
+### Manual install / update
 To install the latest version directly from this Github Repo.
 1. Download the [latest release version](https://github.com/obstrom/TitanRaidLockout/releases/latest) from the repository Release page.
-2. Extract the folder ```TitanRaidLockout``` from the downloaded .zip file into your World of Warcraft Classic folder (```...\World of Warcraft\_classic_\Interface\AddOns```).
+2. Extract the folder ```TitanRaidLockout``` from the downloaded .zip file into your Addons folder (```...\World of Warcraft\_classic_\Interface\AddOns```).
 
 ## Localizations
 This addon supports localization and can be translated to work with all game client languages.
