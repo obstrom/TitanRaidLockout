@@ -1,7 +1,8 @@
-#### v1.0.3-dev
+#### v1.0.3
 
-- Bugfix: German localization of AQ40 was wrong and causing the abbreviation of AQ40 not to show correctly in red on lockout.
-- Misc: Code refactor
+- Bugfix: Abbreviation of AQ40 not to showing correctly in red when actually locked in English and German game clients. Issue might still be present in other game client languages.
+- Misc: Changed the "all instances unlocked" message color in tooltip from white to green.
+- Misc: Some code refactoring.
 
 #### v1.0.2
 
