@@ -100,97 +100,62 @@ end
 --  _SetButtonText()
 -- **************************************************************************
 function TRaidLockout_SetButtonText()
-    
+        
+    local localizedRaidName = {
+        ["ONY"] = GetRealZoneText(249),
+        ["ZG"] = GetRealZoneText(309),
+        ["MC"] = GetRealZoneText(409),
+        ["BWL"] = GetRealZoneText(469),
+        ["AQ20"] = GetRealZoneText(509),
+        ["AQ40"] = GetRealZoneText(531),
+    }
     local numSaved = GetNumSavedInstances()
-    
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     buttonLabel = L["Lockout: "]
+    buttonText = TitanUtils_Ternary(coloredText, COLOR.red, COLOR.white)
     
-    if coloredText then
-        textColor = COLOR.red
-    else
-        textColor = COLOR.white
-    end
-    
-    buttonText = textColor
-    
-    if showUnlocked then
+     local raidsTable = { 
+        -- key, subTable{ localized abbr, is locked }
+        ["ZG"] = { L["ZG"], false },
+        ["MC"] = { L["MC"], false },
+        ["BWL"] = { L["BWL"], false },
+        ["ONY"] = { L["ONY"], false },
+        ["AQ20"] = { L["AQ20"], false },
+        ["AQ40"] = { L["AQ40"], false },
+    }
         
-        local raidsTable = {
-            ["ZG"] = L["Zul'Gurub"],
-            ["MC"] = L["Molten Core"],
-            ["BWL"] = L["Blackwing Lair"],
-            ["ONY"] = L["Onyxia's Lair"],
-            ["AQ20"] = L["Ruins of Ahn'Qiraj"],
-            ["AQ40"] = L["Ahn'Qiraj"],
-        }
+    if showUnlocked then -- Show green abbr
         
         if numSaved > 0 then
-            -- Add locked instance abbriviations to button text
             for savedIndex = 1, numSaved do
-
                 local name = GetSavedInstanceInfo(savedIndex)
-
-                if name == L["Zul'Gurub"] then
-                    buttonText = buttonText .. " " .. L["ZG"]
-                    raidsTable["ZG"] = nil
-                elseif name == L["Molten Core"] then
-                    buttonText = buttonText .. " " .. L["MC"]
-                    raidsTable["MC"] = nil
-                elseif name == L["Blackwing Lair"] then
-                    buttonText = buttonText .. " " .. L["BWL"]
-                    raidsTable["BWL"] = nil
-                elseif name == L["Onyxia's Lair"] then
-                    buttonText = buttonText .. " " .. L["ONY"]
-                    raidsTable["ONY"] = nil
-                elseif name == L["Ruins of Ahn'Qiraj"] then
-                    buttonText = buttonText .. " " .. L["AQ20"]
-                    raidsTable["AQ20"] = nil
-                elseif name == L["Ahn'Qiraj"] then
-                    buttonText = buttonText .. " " .. L["AQ40"]
-                    raidsTable["AQ40"] = nil
+                
+                for key, subTable in pairs(raidsTable) do
+                    if name == localizedRaidName[key] then
+                        buttonText = buttonText .. " " .. subTable[1]
+                        subTable[2] = true
+                    end
                 end
-
             end
         end
         
-
-        if coloredText then
-            buttonText = buttonText .. COLOR.green
-        else
-            buttonText = buttonText .. " |"
-        end
+        buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |") 
         
-        for abbr, raidName in pairs(raidsTable) do
-            buttonText = buttonText .. " " .. L[abbr]
+        for index, subTable in pairs(raidsTable) do
+            if not subTable[2] then buttonText = buttonText .. " " .. subTable[1] end 
         end
     
-    else
-
+    else -- Don't show green abbr
         if numSaved > 0 then
-            -- Add locked instance abbriviations to button text
             for savedIndex = 1, numSaved do
-
                 local name = GetSavedInstanceInfo(savedIndex)
-
-                if name == L["Zul'Gurub"] then
-                    buttonText = buttonText .. " " .. L["ZG"]
-                elseif name == L["Molten Core"] then
-                    buttonText = buttonText .. " " .. L["MC"]
-                elseif name == L["Blackwing Lair"] then
-                    buttonText = buttonText .. " " .. L["BWL"]
-                elseif name == L["Onyxia's Lair"] then
-                    buttonText = buttonText .. " " .. L["ONY"]
-                elseif name == L["Ruins of Ahn'Qiraj"] then
-                    buttonText = buttonText .. " " .. L["AQ20"]
-                elseif name == L["Ahn'Qiraj"] then
-                    buttonText = buttonText .. " " .. L["AQ40"]
+                
+                for key, subTable in pairs(raidsTable) do 
+                    if name == localizedRaidName[key] then buttonText = buttonText .. " " .. subTable[1] end  
                 end
-
             end
         end
-        
     end
         
 end
@@ -199,7 +164,7 @@ end
 --  _SetTooltip()
 -- **************************************************************************
 function TRaidLockout_SetTooltip()
-            
+             
 	tooltipText = ""
     local numSaved = GetNumSavedInstances()
     local showHeader = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
@@ -213,10 +178,9 @@ function TRaidLockout_SetTooltip()
     
     if numSaved < 1 then
         
-        tooltipText = tooltipText .. COLOR.white .. L["All raid instances are unlocked"]
+        tooltipText = tooltipText .. COLOR.green .. L["All raid instances are unlocked"]
         
     else
-        -- Add locked instances to tooltip
         for savedIndex = 1, numSaved do
 
             local name, _, reset, _, _, _, _, _, _, _, numEncounters, encounterProgress, _ = GetSavedInstanceInfo(savedIndex)
