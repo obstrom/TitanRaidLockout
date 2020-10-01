@@ -1,8 +1,8 @@
 #### v1.0.3
 
-- Bugfix: Abbreviation of AQ40 not to showing correctly in red when actually locked in English and German game clients. Issue might still be present in other game client languages.
+- Bugfix: Abbreviation of AQ40 not to showing correctly in red when actually locked in English and German game clients.
+- Bugfix: Fixed localization issue, the addon now queries the game client for all baseline localizations. This should make the addon compatible with all game client languages, regardless of translations.
 - Misc: Changed the "all instances unlocked" message color in tooltip from white to green.
-- Misc: Some code refactoring.
 
 #### v1.0.2
 
