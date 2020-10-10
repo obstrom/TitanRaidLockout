@@ -4,6 +4,15 @@
 -- * By: Gamut - Nethergarde Keep EU
 -- **************************************************************************
 
+-- TODO for v.1.0.4:
+-- Implement SavedVariables
+---- Save test variable
+---- Load test variable
+-- Implement saving current characters lockout info upon event trigger
+---- Save this in the most proper way for loading
+-- Implement loading other characters lockout info upon 
+---- Display this in tooltip
+
 local addonName, addonTable = ...
 
 -- Constants
