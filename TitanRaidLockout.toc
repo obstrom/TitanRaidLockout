@@ -4,5 +4,6 @@
 ## Author: Gamut - Nethergarde Keep EU
 ## Version: v1.0.4-dev-classic
 ## Dependencies: TitanClassic
+## SavedVariables: SavedLockoutTable
 TitanRaidLockout.xml
 TitanRaidLockout_locales.lua

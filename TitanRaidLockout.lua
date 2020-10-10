@@ -7,16 +7,19 @@
 -- TODO for v.1.0.4:
 -- Implement SavedVariables
 ---- Save test variable
+------ Save by calling _G["SavedLockoutTable"] = ...
 ---- Load test variable
+------ Load by calling ... = _G["SavedLockoutTable"]
 -- Implement saving current characters lockout info upon event trigger
 ---- Save this in the most proper way for loading
 -- Implement loading other characters lockout info upon 
 ---- Display this in tooltip
 
 local addonName, addonTable = ...
+local _G = getfenv()
 
 -- Constants
-local TITAN_RAIDLOCKOUT_ID = "TitanRaidLockout"
+local TITAN_RAIDLOCKOUT_ID = addonName
 local VERSION = GetAddOnMetadata(GetAddOnInfo(TITAN_RAIDLOCKOUT_ID), "Version")
 local COLOR = {
     ["white"] = "|cFFFFFFFF",
@@ -25,6 +28,9 @@ local COLOR = {
     ["green"] = GREEN_FONT_COLOR_CODE,
     ["yellow"] = "|cFFFFF244",
 }
+local PLAYER_NAME = UnitName("player")
+local PLAYER_REALM = GetRealmName()
+local PLAYER_NAME_AT_REALM = PLAYER_NAME .. "@" .. PLAYER_REALM
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
@@ -35,7 +41,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 function TRaidLockout_Init()
     if (myAddOnsFrame_Register) then
 		myAddOnsFrame_Register( {name=TITAN_RAIDLOCKOUT_ID,version=VERSION,category=MYADDONS_CATEGORY_PLUGINS} )
-	end
+    end
 end
 
 function TRaidLockout_OnLoad(self)    
@@ -50,7 +56,7 @@ function TRaidLockout_OnLoad(self)
         iconButtonWidth = 16,
         category = "Information",
         version = VERSION,
-        savedVariables = {
+        savedVariables = { -- Global for TitanPanel saves into "WTF/Account/[AccountName]/SavedVariables/TitanClassic.lua"
             ShowTooltipHeader = true,
             ShowUnlockedButton = false,
             ShowUnlockedTooltip = false,
@@ -58,21 +64,33 @@ function TRaidLockout_OnLoad(self)
             ShowColoredText = true,
             ShowLabelText = true,
         }
-    };
-    self:RegisterEvent("VARIABLES_LOADED")
+    }
+    self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD") 
     self:RegisterEvent("UPDATE_INSTANCE_INFO")
 end
 
 function TRaidLockout_OnEvent(self, event, ...)
-    if (event == "VARIABLES_LOADED") then
-		TRaidLockout_Init();
+    if (event == "ADDON_LOADED") then
+        TRaidLockout_Init()
+        TRaidLockout_SetupSavedVariableTemplate()
     elseif (event == "UPDATE_INSTANCE_INFO") then
         TRaidLockout_GetButtonText()
         TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
     elseif (event == "PLAYER_ENTERING_WORLD") then
         TRaidLockout_GetButtonText()
         TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
+    end
+end
+
+function TRaidLockout_SetupSavedVariableTemplate()
+    if _G["SavedLockoutTable"] == nil or _G["SavedLockoutTable"]["Players"] == nil then
+        _G["SavedLockoutTable"] = {
+            ["Players"] = {}
+        }
+    end
+    if _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM] == nil then
+        _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM] = {}
     end
 end
 
@@ -124,7 +142,7 @@ function TRaidLockout_SetButtonText()
     buttonLabel = L["Lockout: "]
     buttonText = TitanUtils_Ternary(coloredText, COLOR.red, COLOR.white)
     
-     local raidsTable = { 
+    local raidsTable = { 
         -- key, subTable{ localized abbr, is locked }
         ["ZG"] = { L["ZG"], false },
         ["MC"] = { L["MC"], false },
@@ -144,9 +162,13 @@ function TRaidLockout_SetButtonText()
                     if name == localizedRaidName[key] then
                         buttonText = buttonText .. " " .. subTable[1]
                         subTable[2] = true
+                        _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM]["LockedTable"][key] = true
+                    else
+                        _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM]["LockedTable"][key] = nil
                     end
                 end
             end
+            _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM]["IsAnyLocked"] = true
         end
         
         buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |") 
@@ -161,9 +183,15 @@ function TRaidLockout_SetButtonText()
                 local name = GetSavedInstanceInfo(savedIndex)
                 
                 for key, subTable in pairs(raidsTable) do 
-                    if name == localizedRaidName[key] then buttonText = buttonText .. " " .. subTable[1] end  
+                    if name == localizedRaidName[key] then 
+                        buttonText = buttonText .. " " .. subTable[1]
+                        _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM]["LockedTable"][key] = true
+                    else
+                        _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM]["LockedTable"][key] = nil
+                    end 
                 end
             end
+            _G["SavedLockoutTable"]["Players"][PLAYER_NAME_AT_REALM]["IsAnyLocked"] = true
         end
     end
         
