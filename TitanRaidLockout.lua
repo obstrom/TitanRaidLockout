@@ -108,6 +108,7 @@ function TRaidLockout_SetButtonText()
         ["BWL"] = GetRealZoneText(469),
         ["AQ20"] = GetRealZoneText(509),
         ["AQ40"] = GetRealZoneText(531),
+        ["NAXX"] = GetRealZoneText(533),
     }
     local numSaved = GetNumSavedInstances()
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
@@ -123,6 +124,7 @@ function TRaidLockout_SetButtonText()
         ["ONY"] = { L["ONY"], false },
         ["AQ20"] = { L["AQ20"], false },
         ["AQ40"] = { L["AQ40"], false },
+        ["NAXX"] = { L["NAXX"], false },
     }
         
     if showUnlocked then -- Show green abbr
