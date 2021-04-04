@@ -17,6 +17,7 @@ L["Blackwing Lair"] = "Blackwing Lair"
 L["Onyxia's Lair"] = "Onyxia's Lair"
 L["Ruins of Ahn'Qiraj"] = "Ruins of Ahn'Qiraj"
 L["Ahn'Qiraj"] = "Ahn'Qiraj Temple"
+L["Naxxramas"] = "Naxxramas"
 
 -- Instance abbreviations
 L["ZG"] = "ZG" --Zul'Gurub
@@ -25,6 +26,7 @@ L["BWL"] = "BWL" --Blackwing Lair
 L["ONY"] = "ONY" --Onyxia's Lair
 L["AQ20"] = "AQ20" --Ruins of Ahn'Qiraj
 L["AQ40"] = "AQ40" --Ahn'Qiraj
+L["NAXX"] = "NAXX" --Naxxramas
 
 if GetLocale() == "deDE" then
     -- German localization here

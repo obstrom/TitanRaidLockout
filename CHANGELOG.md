@@ -1,3 +1,7 @@
+#### v1.0.4
+
+- Addition: Added support for Naxxramas.
+
 #### v1.0.3
 
 - Bugfix: Abbreviation of AQ40 not to showing correctly in red when actually locked in English and German game clients.
