@@ -1,3 +1,7 @@
+#### v1.1.0
+
+- Addition: Added showing cross-character (and realm) lockout info to the addon tooltip.
+
 #### v1.0.4
 
 - Addition: Added support for Naxxramas.

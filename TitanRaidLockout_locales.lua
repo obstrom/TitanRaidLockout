@@ -2,8 +2,11 @@ local _, addonTable = ...
 L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
 -- Addon menu text
-L["Tooltip Legend"] = "Tooltip Legend" -- Settings menu option
-L["Panel - Show all instances"] = "Panel - Show all instances" -- Settings menu option
+L["PanelOptions"] = "Panel options" -- Settings menu option heading
+L["ShowAllInstances"] = "Show all instances" -- Settings menu option
+L["TooltipOptions"] = "Tooltip options" -- Settings menu option heading
+L["ShowLayoutHint"] = "Show layout hint" -- Settings menu option
+L["ShowNonLockedCharacters"] = "Show non-locked characters" -- Settings menu option
 L["TITAN_PANEL_MENU_HIDE"] = "Hide" -- Settings menu option
 L["Lockout: "] = "Lockout: " -- Panel label text
 L["Instance Name [Bosses]"] = "Instance Name [Bosses]" -- Tooltip legend hint
