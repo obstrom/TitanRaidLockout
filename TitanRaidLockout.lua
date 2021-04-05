@@ -4,10 +4,6 @@
 -- * By: Gamut - Nethergarde Keep EU
 -- **************************************************************************
 
--- Left TODO for v.1.1.0:
---  Fix Ugly formatting
---  Add option for not showing certain chars
-
 local addonName, addonTable = ...
 local _G = getfenv()
 
@@ -134,10 +130,10 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     -- Level 2
     if _G["L_UIDROPDOWNMENU_MENU_LEVEL"] == 2 then
         if _G["L_UIDROPDOWNMENU_MENU_VALUE"] == "PanelOptions" then
-            TitanPanelRightClickMenu_AddTitle(L["Panel options"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+            TitanPanelRightClickMenu_AddTitle(L["PanelOptions"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
             info = {};
-			info.text = L["Show all instances"];
+			info.text = L["ShowAllInstances"];
 			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton") end
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowUnlockedButton")
 			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
@@ -145,16 +141,16 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
         end
 
         if _G["L_UIDROPDOWNMENU_MENU_VALUE"] == "TooltipOptions" then
-            TitanPanelRightClickMenu_AddTitle(L["Tooltip options"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
+            TitanPanelRightClickMenu_AddTitle(L["TooltipOptions"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
 
             info = {};
-			info.text = L["Show layout hint"]
+			info.text = L["ShowLayoutHint"]
 			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader") end
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowTooltipHeader")
 			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
             info = {};
-			info.text = L["Show non-locked characters"];
+			info.text = L["ShowNonLockedCharacters"];
 			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowAllCharacters") end
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowAllCharacters");
 			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
@@ -172,14 +168,14 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
     
     info = {};
 	info.notCheckable = true
-	info.text = L["Panel options"];
+	info.text = L["PanelOptions"];
 	info.value = "PanelOptions"
 	info.hasArrow = 1;
 	L_UIDropDownMenu_AddButton(info);
 
     info = {};
 	info.notCheckable = true
-	info.text = L["Tooltip options"];
+	info.text = L["TooltipOptions"];
 	info.value = "TooltipOptions"
 	info.hasArrow = 1;
 	L_UIDropDownMenu_AddButton(info);
@@ -199,7 +195,6 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 	TitanPanelRightClickMenu_AddCommand(L["TITAN_PANEL_MENU_HIDE"], TITAN_RAIDLOCKOUT_ID, TITAN_PANEL_MENU_FUNC_HIDE);
 end
 
--- Takes a UNIX time and formats it to "Dayofweek 31/12 23:59"
 function TRaidLockout_UNIXTimeToDateTimeString(unixTime)
     unixTime = unixTime + 5 -- add 5 sec for leeway
     local dateTable = date("*t", unixTime)
@@ -399,18 +394,19 @@ function TRaidLockout_SetTooltip()
 
     tooltipText = tooltipText .. headerText
 
-    -- Loop thru LOCKOUT_DATA for ToolTip
-    -- First output THIS player
+    -- :: Loop thru LOCKOUT_DATA for ToolTip in certain order for to get ordered output ::
+
+    -- 1. output THIS player
     tooltipText = tooltipText .. "\n" .. COLOR.green .. PLAYER_NAME .. COLOR.yellow .. "\n" ..  TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(true, false, LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["NumSaved"], LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"])
 
-    -- Then loop thru THIS server, skipping the player char since it's already been output
+    -- 2. loop thru THIS server, skipping the player char since it's already been output
     for charName, charData in pairs(LOCKOUT_DATA["Players"][PLAYER_REALM]) do
         if charData["Lockouts"] ~= nil then
             tooltipText = tooltipText .. TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(PLAYER_REALM, charName, charData["NumSaved"], charData["Lockouts"], false)
         end
     end
 
-    -- Finally loop thru all servers and SKIP THIS server since it's already been output
+    -- 3. loop thru all servers and SKIP THIS server since it's already been output
     for serverName, character in pairs(LOCKOUT_DATA["Players"]) do
         if serverName ~= PLAYER_REALM then
             for charName, charData in pairs(character) do
