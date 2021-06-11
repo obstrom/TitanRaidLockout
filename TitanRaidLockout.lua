@@ -28,6 +28,15 @@ local LOCALIZED_RAID_NAMES = {
     ["AQ20"] = GetRealZoneText(509),
     ["AQ40"] = GetRealZoneText(531),
     ["NAXX"] = GetRealZoneText(533),
+    ["KARA"] = GetRealZoneText(532),
+    ["HY"] = GetRealZoneText(534),
+    ["MAG"] = GetRealZoneText(544),
+    ["SSC"] = GetRealZoneText(548),
+    ["TK"] = GetRealZoneText(550),
+    ["BT"] = GetRealZoneText(564),
+    ["GRU"] = GetRealZoneText(565),
+    ["ZA"] = GetRealZoneText(568),	
+    ["SUN"] = GetRealZoneText(580),
 }
 local LOCKOUT_DATA = {}
 --local SEEN_CHARACTERS = {}
@@ -138,6 +147,18 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowUnlockedButton")
 			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
+            info = {};
+			info.text = L["PanelShowClassicRaids"];
+			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInPanel") end
+			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowClassicRaidsInPanel")
+			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+
+            info = {};
+			info.text = L["PanelShowTBCRaids"];
+			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowTBCRaidsInPanel") end
+			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowTBCRaidsInPanel")
+			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+
         end
 
         if _G["L_UIDROPDOWNMENU_MENU_VALUE"] == "TooltipOptions" then
@@ -154,6 +175,18 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowAllCharacters") end
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowAllCharacters");
 			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
+
+            info = {};
+			info.text = L["TooltipShowClassicRaids"];
+			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip") end
+			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowClassicRaidsInPanel")
+			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+
+            info = {};
+			info.text = L["TooltipShowTBCRaids"];
+			info.func = function() TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowTBCRaidsInTooltip") end
+			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowTBCRaidsInPanel")
+			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
         end
 
         --if _G["L_UIDROPDOWNMENU_MENU_VALUE"] == "DisplayCharacters" then
@@ -280,7 +313,8 @@ function TRaidLockout_SetButtonText()
     buttonLabel = L["Lockout: "]
     buttonText = TitanUtils_Ternary(coloredText, COLOR.red, COLOR.white)
     
-    local raidsTable = { 
+
+    local raidsTableClassic = { 
         -- key, subTable{ localized abbr, is locked }
         ["ZG"] = { L["ZG"], false },
         ["MC"] = { L["MC"], false },
@@ -290,6 +324,22 @@ function TRaidLockout_SetButtonText()
         ["AQ40"] = { L["AQ40"], false },
         ["NAXX"] = { L["NAXX"], false },
     }
+
+    local raidsTableTBC = = { 
+        -- key, subTable{ localized abbr, is locked }
+        ["KARA"] = { L["KARA"], false },
+        ["HYJA"] = { L["HYJA"], false },
+        ["MAG"] = { L["MAG"], false },
+        ["SERP"] = { L["SERP"], false },
+        ["TEMP"] = { L["TEMP"], false },
+        ["BLK"] = { L["BLK"], false },
+        ["ZA"] = { L["ZA"], false },
+        ["SUN"] = { L["SUN"], false },
+    }
+
+    -- FIX THIS
+    -- Dirty temp fix, joining both Classic and TBC tables to test things
+    raidsTableClassic = { table.unpack(raidsTableClassic), table.unpack(raidsTableTBC) }
         
     if showUnlocked then -- Show green abbr
         
@@ -297,7 +347,7 @@ function TRaidLockout_SetButtonText()
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
                 
-                for key, subTable in pairs(raidsTable) do
+                for key, subTable in pairs(raidsTableClassic) do
                     if name == LOCALIZED_RAID_NAMES[key] then
                         buttonText = buttonText .. " " .. subTable[1]
                         subTable[2] = true
@@ -308,7 +358,7 @@ function TRaidLockout_SetButtonText()
         
         buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |") 
         
-        for index, subTable in pairs(raidsTable) do
+        for index, subTable in pairs(raidsTableClassic) do
             if not subTable[2] then buttonText = buttonText .. " " .. subTable[1] end 
         end
     
@@ -317,7 +367,7 @@ function TRaidLockout_SetButtonText()
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
                 
-                for key, subTable in pairs(raidsTable) do 
+                for key, subTable in pairs(raidsTableClassic) do 
                     if name == LOCALIZED_RAID_NAMES[key] then 
                         buttonText = buttonText .. " " .. subTable[1]
                     end 
