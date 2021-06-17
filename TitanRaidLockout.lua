@@ -229,6 +229,7 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
                 TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
             end
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowClassicRaidsInTooltip")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
 
             info = {};
 			info.text = L["TooltipShowHeroics"];
@@ -353,7 +354,6 @@ function TRaidLockout_SetButtonText()
     local showHeroics = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
     buttonLabel = L["Lockout: "]
     buttonText = TitanUtils_Ternary(coloredText, COLOR.orange, COLOR.white)
-
 
     local heroicsTableTBC = {
         -- key, subTable{ localized abbr, is locked }
