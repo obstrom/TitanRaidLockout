@@ -2,6 +2,7 @@
 
 See at a glance if you are locked for any raid instance and when it resets - directly in Titan Panel.
 Now supports Classic TBC with raids and heroic dungeons.
+
 ![Example image](http://obstrom.com/github/raidlockout/readme1.jpg)
 
 ## Installation
