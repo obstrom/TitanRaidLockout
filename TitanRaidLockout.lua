@@ -56,7 +56,7 @@ local LOCALIZED_ALL_RAID_NAMES = {
     ["BT"] = GetRealZoneText(564),
     ["GRU"] = GetRealZoneText(565),
     ["ZA"] = GetRealZoneText(568),	
-    ["SUN"] = GetRealZoneText(580),
+    --["SUN"] = GetRealZoneText(580),
 }
 local LOCALIZED_CLASSIC_RAID_NAMES_ONLY = {
     ["ONY"] = GetRealZoneText(249),
@@ -76,11 +76,10 @@ local LOCALIZED_TBC_RAID_NAMES_ONLY = {
     ["BT"] = GetRealZoneText(564),
     ["GRU"] = GetRealZoneText(565),
     ["ZA"] = GetRealZoneText(568),	
-    ["SUN"] = GetRealZoneText(580),
+    --["SUN"] = GetRealZoneText(580),
 }
 
 local LOCKOUT_DATA = {}
---local SEEN_CHARACTERS = {}
 
 local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
@@ -113,6 +112,7 @@ function TRaidLockout_OnLoad(self)
             ShowHeroicsButton = true,
             ShowUnlockedTooltip = false,
             ShowClassicRaidsInTooltip = true,
+            ShowHeroicsInTooltip = true,
             ShowIcon = true,
             ShowColoredText = true,
             ShowLabelText = true,
@@ -230,12 +230,15 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
             end
 			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowClassicRaidsInTooltip")
 
+            info = {};
+			info.text = L["TooltipShowHeroics"];
+			info.func = function() 
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsInTooltip")
+            end
+			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowHeroicsInTooltip")
+
 			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
         end
-
-        --if _G["L_UIDROPDOWNMENU_MENU_VALUE"] == "DisplayCharacters" then
-        --  TitanPanelRightClickMenu_AddTitle(L["Characters to display"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
-        --end
 
         return
     end
@@ -256,13 +259,6 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 	info.value = "TooltipOptions"
 	info.hasArrow = 1;
 	L_UIDropDownMenu_AddButton(info);
-
-    --info = {};
-	--info.notCheckable = true
-	--info.text = L["Characters to display"];
-	--info.value = "DisplayCharacters"
-	--info.hasArrow = 1;
-	--L_UIDropDownMenu_AddButton(info);
     
     TitanPanelRightClickMenu_AddSpacer()
     TitanPanelRightClickMenu_AddToggleIcon(TITAN_RAIDLOCKOUT_ID);
@@ -376,7 +372,7 @@ function TRaidLockout_SetButtonText()
         ["MT"] = { L["MT"], false },
         ["AC"] = { L["AC"], false },
         ["OHF"] = { L["OHF"], false },
-        --["MAT"] = { L["MAT"], false },
+        --["MAT"] = { L["MAT"], false }, --P5
     }
 
     local raidsTableTBC = { 
@@ -384,12 +380,12 @@ function TRaidLockout_SetButtonText()
         ["KARA"] = { L["KARA"], false },
         ["GRU"] = { L["GRU"], false },
         ["MAG"] = { L["MAG"], false },
-        --["SERP"] = { L["SERP"], false },
-        --["TEMP"] = { L["TEMP"], false },
-        --["HYJA"] = { L["HYJA"], false },
-        --["BLK"] = { L["BLK"], false },
-        --["ZA"] = { L["ZA"], false },
-        --["SUN"] = { L["SUN"], false },
+        ["SSC"] = { L["SSC"], false },
+        ["TK"] = { L["TK"], false },
+        ["HY"] = { L["HY"], false },
+        ["BT"] = { L["BT"], false },
+        ["ZA"] = { L["ZA"], false },
+        --["SUN"] = { L["SUN"], false }, --P5
     }
         
     if showUnlocked then -- Show green abbr
@@ -505,12 +501,13 @@ function TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(isPlayerChar, show
 
     local resultText = ""
     local showClassicRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
+    local showHeroicsTooltip = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsInTooltip")
 
     if isPlayerChar and numSaved < 1 or showAllChars and numSaved < 1 then
         resultText = COLOR.green .. " - " .. L["All raids and heroics are unlocked"] .. COLOR.white .. "\n"
     else
         -- Show any heroics first
-        local heroicsResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_HEROIC_NAMES, charData, COLOR.heroic)
+        local heroicsResultsText = TitanUtils_Ternary(showHeroicsTooltip, TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_HEROIC_NAMES, charData, COLOR.heroic), "")
 
         -- Then show any classic raids
         local classicResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_CLASSIC_RAID_NAMES_ONLY, charData, COLOR.classic), "")
