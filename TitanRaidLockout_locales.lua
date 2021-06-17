@@ -43,7 +43,7 @@ L["ZA"] = "ZA" --Zul'Aman
 L["SUN"] = "SUN" --Sunwell Plateau
 
 L["BM"] = "BM" --The Black Morass
-L["TSH"] = "TSH" --The Shattered Halls
+L["SHH"] = "SHH" --The Shattered Halls
 L["BF"] = "BF" --The Blood Furnace
 L["HR"] = "HR" --Hellfire Ramparts
 L["SV"] = "SV" --The Steamvault
