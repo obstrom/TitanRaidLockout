@@ -1,4 +1,4 @@
-## Interface: 11306
+## Interface: 20501
 ## Title: Titan Panel Classic [|cffeda55fRaidLockout|r] |cff00aa001.2.0 TBC|r
 ## Notes: Adds raid lockout info to Titan Panel
 ## Author: Gamut - Nethergarde Keep EU
