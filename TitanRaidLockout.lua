@@ -38,7 +38,7 @@ local LOCALIZED_HEROIC_NAMES = {
     ["MT"] = GetRealZoneText(557),
     ["AC"] = GetRealZoneText(558),
     ["OHF"] = GetRealZoneText(560),
-    --["MAT"] = GetRealZoneText(585),
+    ["MAT"] = GetRealZoneText(585),
 }
 local LOCALIZED_ALL_RAID_NAMES = {
     ["ONY"] = GetRealZoneText(249),
@@ -56,7 +56,7 @@ local LOCALIZED_ALL_RAID_NAMES = {
     ["BT"] = GetRealZoneText(564),
     ["GRU"] = GetRealZoneText(565),
     ["ZA"] = GetRealZoneText(568),	
-    --["SUN"] = GetRealZoneText(580),
+    ["SUN"] = GetRealZoneText(580),
 }
 local LOCALIZED_CLASSIC_RAID_NAMES_ONLY = {
     ["ONY"] = GetRealZoneText(249),
@@ -76,7 +76,7 @@ local LOCALIZED_TBC_RAID_NAMES_ONLY = {
     ["BT"] = GetRealZoneText(564),
     ["GRU"] = GetRealZoneText(565),
     ["ZA"] = GetRealZoneText(568),	
-    --["SUN"] = GetRealZoneText(580),
+    ["SUN"] = GetRealZoneText(580),
 }
 
 local LOCKOUT_DATA = {}
@@ -372,7 +372,7 @@ function TRaidLockout_SetButtonText()
         ["MT"] = { L["MT"], false },
         ["AC"] = { L["AC"], false },
         ["OHF"] = { L["OHF"], false },
-        --["MAT"] = { L["MAT"], false }, --P5
+        ["MAT"] = { L["MAT"], false }, --P5
     }
 
     local raidsTableTBC = { 
@@ -385,7 +385,7 @@ function TRaidLockout_SetButtonText()
         ["HY"] = { L["HY"], false },
         ["BT"] = { L["BT"], false },
         ["ZA"] = { L["ZA"], false },
-        --["SUN"] = { L["SUN"], false }, --P5
+        ["SUN"] = { L["SUN"], false }, --P5
     }
         
     if showUnlocked then -- Show green abbr
