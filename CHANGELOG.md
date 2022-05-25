@@ -7,7 +7,11 @@
 
 #### v1.2.0 TBC
 
--   Addition: Added support for TBC
+-   Addition: Added support for TBC raids for Phase 1
+-   Addition: Added feature for showing lockout of daily heroic dungeons
+-   Addition: Added options for showing/hiding classic raids
+-   Change: Change color appearance of classic dungeon lockouts
+-   Bugfix: Fixed Titan Panel radio-button on options not updating correctly when changing options
 
 #### v1.1.0
 
