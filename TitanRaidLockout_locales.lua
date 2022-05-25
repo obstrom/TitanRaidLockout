@@ -50,7 +50,7 @@ L["SEH"] = "SEH" --Sethekk Halls
 L["MT"] = "MT" --Mana-Tombs
 L["AC"] = "AC" --Auchenai Crypts
 L["OHF"] = "OHF" --Old Hillsbrad Foothills
---L["MAT"] = "MAT" --Magisters' Terrace
+L["MAT"] = "MAT" --Magisters' Terrace
 
 if GetLocale() == "deDE" then
     -- German localization here
