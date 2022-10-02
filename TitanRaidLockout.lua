@@ -97,10 +97,10 @@ local LOCALIZED_WOTLK_RAID_NAMES = {
 -- Collect separate heroics tables into one table
 local LOCALIZED_ALL_HEROIC_NAMES = {}
 for k, v in pairs(LOCALIZED_TBC_HEROIC_NAMES) do
-    LOCALIZED_ALL_RAID_NAMES[k] = v
+    LOCALIZED_ALL_HEROIC_NAMES[k] = v
 end
 for k, v in pairs(LOCALIZED_WOTLK_HEROIC_NAMES) do
-    LOCALIZED_ALL_RAID_NAMES[k] = v
+    LOCALIZED_ALL_HEROIC_NAMES[k] = v
 end
 
 -- Collect separate raids tables into one table
