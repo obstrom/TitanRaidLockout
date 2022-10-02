@@ -1,3 +1,8 @@
+### v1.3.0 WoTLK
+
+-   Addition: Added support for WoTLK raids and heroics
+-   Addition: Added settings menu option to show/hide TBC raids
+
 #### v1.2.1 TBC
 
 -   Bugfix: Fixed the following patch 2.4 dungeons and raids not showing:
