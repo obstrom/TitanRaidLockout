@@ -640,7 +640,7 @@ function TRaidLockout_SetTooltip()
         if charData["Lockouts"] ~= nil then
             tooltipText = tooltipText ..
                               TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(PLAYER_REALM, charName,
-                    charData["NumSaved"], charData["Lockouts"], false)
+                    charData["NumSaved"], charData["Lockouts"])
         end
     end
 
