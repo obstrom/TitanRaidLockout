@@ -6,36 +6,10 @@
 local addonName, addonTable = ...
 local _G = getfenv()
 
--- WOTLK DUNGEONS --
--- 619 - Ahn'kahet: The Old Kingdom     AK
--- 601 - Azjol-Nerub                    AN
--- 600 - Drak'Tharon Keep               DTK
--- 604 - Gundrak                        GUN
--- 602 - Halls of Lightning             HoL
--- 668 - Halls of Reflection            HoR
--- 599 - Halls of Stone                 HoS
--- 658 - Pit of Saron                   PoS
--- 595 - The Culling of Stratholme      CoS
--- 632 - The Forge of Souls             FoS
--- 576 - The Nexus                      NEX
--- 578 - The Oculus                     OC
--- 608 - The Violet Hold                VH
--- 650 - Trial of the Champion          ToC5
--- 574 - Utgarde Keep                   UK
--- 575 - Utgarde Pinnacle               UP
+-- **************************************************************************
+--  Constants
+-- **************************************************************************
 
--- WOTLK RAIDS --
--- 631 - Icecrown Citadel               ICC
--- 533 - Naxxramas                      NAXX
--- 249 - Onyxia's Lair                  ONY
--- 616 - The Eye of Eternity            EoE
--- 615 - The Obsidian Sanctum           OS
--- 724 - The Ruby Sanctum               RS
--- 649 - Trial of the Crusader          ToC
--- 603 - Ulduar                         ULD
--- 624 - Vault of Archavon              VoA
-
--- Constants
 local TITAN_RAIDLOCKOUT_ID = addonName
 local VERSION = GetAddOnMetadata(GetAddOnInfo(TITAN_RAIDLOCKOUT_ID), "Version")
 local COLOR = {
@@ -50,6 +24,8 @@ local COLOR = {
 }
 local PLAYER_NAME = UnitName("player")
 local PLAYER_REALM = GetRealmName()
+
+-- Init all heroic names
 local LOCALIZED_TBC_HEROIC_NAMES = {
     ["BM"] = GetRealZoneText(269),
     ["TSH"] = GetRealZoneText(540),
@@ -86,14 +62,14 @@ local LOCALIZED_WOTLK_HEROIC_NAMES = {
     ["PoS"] = GetRealZoneText(658),
     ["HoR"] = GetRealZoneText(668)
 }
+
+-- Init all raid names
 local LOCALIZED_CLASSIC_RAID_NAMES = {
-    -- ["ONY"] = GetRealZoneText(249),
     ["ZG"] = GetRealZoneText(309),
     ["MC"] = GetRealZoneText(409),
     ["BWL"] = GetRealZoneText(469),
     ["AQ20"] = GetRealZoneText(509),
     ["AQ40"] = GetRealZoneText(531)
-    -- ["NAXX"] = GetRealZoneText(533),
 }
 local LOCALIZED_TBC_RAID_NAMES = {
     ["KARA"] = GetRealZoneText(532),
@@ -118,6 +94,7 @@ local LOCALIZED_WOTLK_RAID_NAMES = {
     ["RS"] = GetRealZoneText(724)
 }
 
+-- Collect separate heroics tables into one table
 local LOCALIZED_ALL_HEROIC_NAMES = {}
 for k, v in pairs(LOCALIZED_TBC_HEROIC_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
@@ -126,11 +103,15 @@ for k, v in pairs(LOCALIZED_WOTLK_HEROIC_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
 
+-- Collect separate raids tables into one table
 local LOCALIZED_ALL_RAID_NAMES = {}
 for k, v in pairs(LOCALIZED_CLASSIC_RAID_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
 for k, v in pairs(LOCALIZED_TBC_RAID_NAMES) do
+    LOCALIZED_ALL_RAID_NAMES[k] = v
+end
+for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
 
@@ -171,6 +152,7 @@ function TRaidLockout_OnLoad(self)
             ShowHeroicsButton = true,
             ShowUnlockedTooltip = false,
             ShowClassicRaidsInTooltip = true,
+            ShowTBCRaidsInTooltip = true,
             ShowHeroicsInTooltip = true,
             ShowIcon = true,
             ShowColoredText = true,
@@ -288,6 +270,14 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
                 TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
             end
             info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
+
+            info = {};
+            info.text = L["TooltipShowTBCRaids"];
+            info.func = function()
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowTBCRaidsInTooltip")
+            end
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTBCRaidsInTooltip")
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
 
             info = {};
@@ -415,37 +405,37 @@ function TRaidLockout_SetButtonText()
     buttonLabel = L["Lockout: "]
     buttonText = TitanUtils_Ternary(coloredText, COLOR.orange, COLOR.white)
 
-    local heroicsTableTBC = {
+    local heroicsTableWoTLK = {
         -- key, subTable{ localized abbr, is locked }
-        ["BM"] = {L["BM"], false},
-        ["SHH"] = {L["SHH"], false},
-        ["BF"] = {L["BF"], false},
-        ["HR"] = {L["HR"], false},
-        ["SV"] = {L["SV"], false},
-        ["UB"] = {L["UB"], false},
-        ["SP"] = {L["SP"], false},
-        ["ARC"] = {L["ARC"], false},
-        ["BOT"] = {L["BOT"], false},
-        ["MECH"] = {L["MECH"], false},
-        ["SL"] = {L["SL"], false},
-        ["SEH"] = {L["SEH"], false},
-        ["MT"] = {L["MT"], false},
-        ["AC"] = {L["AC"], false},
-        ["OHF"] = {L["OHF"], false},
-        ["MAT"] = {L["MAT"], false} -- P5
+        ["UK"] = {L["UK"], false},
+        ["UP"] = {L["UP"], false},
+        ["NEX"] = {L["NEX"], false},
+        ["OC"] = {L["OC"], false},
+        ["CoS"] = {L["CoS"], false},
+        ["HoS"] = {L["HoS"], false},
+        ["DTK"] = {L["DTK"], false},
+        ["AN"] = {L["AN"], false},
+        ["HoL"] = {L["HoL"], false},
+        ["GUN"] = {L["GUN"], false},
+        ["VH"] = {L["VH"], false},
+        ["AK"] = {L["AK"], false},
+        ["FoS"] = {L["FoS"], false},
+        ["ToC5"] = {L["ToC5"], false},
+        ["PoS"] = {L["PoS"], false},
+        ["HoR"] = {L["HoR"], false}
     }
 
-    local raidsTableTBC = {
+    local raidsTableWoTLK = {
         -- key, subTable{ localized abbr, is locked }
-        ["KARA"] = {L["KARA"], false},
-        ["GRU"] = {L["GRU"], false},
-        ["MAG"] = {L["MAG"], false},
-        ["SSC"] = {L["SSC"], false},
-        ["TK"] = {L["TK"], false},
-        ["HY"] = {L["HY"], false},
-        ["BT"] = {L["BT"], false},
-        ["ZA"] = {L["ZA"], false},
-        ["SUN"] = {L["SUN"], false} -- P5
+        ["ONY"] = {L["ONY"], false},
+        ["NAXX"] = {L["NAXX"], false},
+        ["ULD"] = {L["ULD"], false},
+        ["OS"] = {L["OS"], false},
+        ["EoE"] = {L["EoE"], false},
+        ["VoA"] = {L["VoA"], false},
+        ["ICC"] = {L["ICC"], false},
+        ["TOC"] = {L["TOC"], false},
+        ["RS"] = {L["RS"], false}
     }
 
     if showUnlocked then -- Show green abbr
@@ -455,10 +445,10 @@ function TRaidLockout_SetButtonText()
             if showHeroics then
                 for savedIndex = 1, numSaved do
                     local name = GetSavedInstanceInfo(savedIndex)
-                    if TitanUtils_TableContainsValue(LOCALIZED_TBC_HEROIC_NAMES, name) then
+                    if TitanUtils_TableContainsValue(LOCALIZED_WOTLK_HEROIC_NAMES, name) then
 
-                        for key, subTable in pairs(heroicsTableTBC) do
-                            if name == LOCALIZED_TBC_HEROIC_NAMES[key] then
+                        for key, subTable in pairs(heroicsTableWoTLK) do
+                            if name == LOCALIZED_WOTLK_HEROIC_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
                                 subTable[2] = true
                             end
@@ -476,7 +466,7 @@ function TRaidLockout_SetButtonText()
                 local name = GetSavedInstanceInfo(savedIndex)
                 if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
 
-                    for key, subTable in pairs(raidsTableTBC) do
+                    for key, subTable in pairs(raidsTableWoTLK) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
                             subTable[2] = true
@@ -491,7 +481,7 @@ function TRaidLockout_SetButtonText()
 
         buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |")
 
-        for index, subTable in pairs(raidsTableTBC) do
+        for index, subTable in pairs(raidsTableWoTLK) do
             if not subTable[2] then
                 buttonText = buttonText .. " " .. subTable[1]
             end
@@ -503,9 +493,9 @@ function TRaidLockout_SetButtonText()
             if showHeroics then
                 for savedIndex = 1, numSaved do
                     local name = GetSavedInstanceInfo(savedIndex)
-                    if TitanUtils_TableContainsValue(LOCALIZED_TBC_HEROIC_NAMES, name) then
-                        for key, subTable in pairs(heroicsTableTBC) do
-                            if name == LOCALIZED_TBC_HEROIC_NAMES[key] then
+                    if TitanUtils_TableContainsValue(LOCALIZED_WOTLK_HEROIC_NAMES, name) then
+                        for key, subTable in pairs(heroicsTableWoTLK) do
+                            if name == LOCALIZED_WOTLK_HEROIC_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
                             end
                         end
@@ -520,7 +510,7 @@ function TRaidLockout_SetButtonText()
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
                 if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
-                    for key, subTable in pairs(raidsTableTBC) do
+                    for key, subTable in pairs(raidsTableWoTLK) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
                         end
@@ -569,6 +559,7 @@ function TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(isPlayerChar, show
 
     local resultText = ""
     local showClassicRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
+    local showTBCRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTBCRaidsInTooltip")
     local showHeroicsTooltip = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsInTooltip")
 
     if isPlayerChar and numSaved < 1 or showAllChars and numSaved < 1 then
@@ -576,16 +567,21 @@ function TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(isPlayerChar, show
     else
         -- Show any heroics first
         local heroicsResultsText = TitanUtils_Ternary(showHeroicsTooltip, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_TBC_HEROIC_NAMES, charData, COLOR.heroic), "")
+            LOCALIZED_ALL_HEROIC_NAMES, charData, COLOR.heroic), "")
 
         -- Then show any classic raids
         local classicResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
             LOCALIZED_CLASSIC_RAID_NAMES, charData, COLOR.classic), "")
 
         -- Then show any tbc raids
-        local tbcResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_TBC_RAID_NAMES, charData, COLOR.orange)
+        local tbcResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
+            LOCALIZED_TBC_RAID_NAMES, charData, COLOR.classic), "")
 
-        resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText
+        -- Then show any wotlk raids
+        local wotlkResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES, charData,
+            COLOR.orange)
+
+        resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText .. wotlkResultsText
     end
 
     return resultText
