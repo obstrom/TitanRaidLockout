@@ -3,9 +3,37 @@
 -- *
 -- * By: Gamut - Nethergarde Keep EU
 -- **************************************************************************
-
 local addonName, addonTable = ...
 local _G = getfenv()
+
+-- WOTLK DUNGEONS --
+-- 619 - Ahn'kahet: The Old Kingdom     AK
+-- 601 - Azjol-Nerub                    AN
+-- 600 - Drak'Tharon Keep               DTK
+-- 604 - Gundrak                        GUN
+-- 602 - Halls of Lightning             HoL
+-- 668 - Halls of Reflection            HoR
+-- 599 - Halls of Stone                 HoS
+-- 658 - Pit of Saron                   PoS
+-- 595 - The Culling of Stratholme      CoS
+-- 632 - The Forge of Souls             FoS
+-- 576 - The Nexus                      NEX
+-- 578 - The Oculus                     OC
+-- 608 - The Violet Hold                VH
+-- 650 - Trial of the Champion          ToC5
+-- 574 - Utgarde Keep                   UK
+-- 575 - Utgarde Pinnacle               UP
+
+-- WOTLK RAIDS --
+-- 631 - Icecrown Citadel               ICC
+-- 533 - Naxxramas                      NAXX
+-- 249 - Onyxia's Lair                  ONY
+-- 616 - The Eye of Eternity            EoE
+-- 615 - The Obsidian Sanctum           OS
+-- 724 - The Ruby Sanctum               RS
+-- 649 - Trial of the Crusader          ToC
+-- 603 - Ulduar                         ULD
+-- 624 - Vault of Archavon              VoA
 
 -- Constants
 local TITAN_RAIDLOCKOUT_ID = addonName
@@ -18,11 +46,11 @@ local COLOR = {
     ["yellow"] = "|cFFFFF244",
     ["heroic"] = "|cFFFFB700",
     ["orange"] = "|cFFFF8C00",
-    ["classic"] = "|cFFCE8731",
+    ["classic"] = "|cFFCE8731"
 }
 local PLAYER_NAME = UnitName("player")
 local PLAYER_REALM = GetRealmName()
-local LOCALIZED_HEROIC_NAMES = {
+local LOCALIZED_TBC_HEROIC_NAMES = {
     ["BM"] = GetRealZoneText(269),
     ["TSH"] = GetRealZoneText(540),
     ["BF"] = GetRealZoneText(542),
@@ -38,16 +66,36 @@ local LOCALIZED_HEROIC_NAMES = {
     ["MT"] = GetRealZoneText(557),
     ["AC"] = GetRealZoneText(558),
     ["OHF"] = GetRealZoneText(560),
-    ["MAT"] = GetRealZoneText(585),
+    ["MAT"] = GetRealZoneText(585)
 }
-local LOCALIZED_ALL_RAID_NAMES = {
-    ["ONY"] = GetRealZoneText(249),
+local LOCALIZED_WOTLK_HEROIC_NAMES = {
+    ["UK"] = GetRealZoneText(574),
+    ["UP"] = GetRealZoneText(575),
+    ["NEX"] = GetRealZoneText(576),
+    ["OC"] = GetRealZoneText(578),
+    ["CoS"] = GetRealZoneText(595),
+    ["HoS"] = GetRealZoneText(599),
+    ["DTK"] = GetRealZoneText(600),
+    ["AN"] = GetRealZoneText(601),
+    ["HoL"] = GetRealZoneText(602),
+    ["GUN"] = GetRealZoneText(604),
+    ["VH"] = GetRealZoneText(608),
+    ["AK"] = GetRealZoneText(619),
+    ["FoS"] = GetRealZoneText(632),
+    ["ToC5"] = GetRealZoneText(650),
+    ["PoS"] = GetRealZoneText(658),
+    ["HoR"] = GetRealZoneText(668)
+}
+local LOCALIZED_CLASSIC_RAID_NAMES = {
+    -- ["ONY"] = GetRealZoneText(249),
     ["ZG"] = GetRealZoneText(309),
     ["MC"] = GetRealZoneText(409),
     ["BWL"] = GetRealZoneText(469),
     ["AQ20"] = GetRealZoneText(509),
-    ["AQ40"] = GetRealZoneText(531),
-    ["NAXX"] = GetRealZoneText(533),
+    ["AQ40"] = GetRealZoneText(531)
+    -- ["NAXX"] = GetRealZoneText(533),
+}
+local LOCALIZED_TBC_RAID_NAMES = {
     ["KARA"] = GetRealZoneText(532),
     ["HY"] = GetRealZoneText(534),
     ["MAG"] = GetRealZoneText(544),
@@ -55,29 +103,36 @@ local LOCALIZED_ALL_RAID_NAMES = {
     ["TK"] = GetRealZoneText(550),
     ["BT"] = GetRealZoneText(564),
     ["GRU"] = GetRealZoneText(565),
-    ["ZA"] = GetRealZoneText(568),	
-    ["SUN"] = GetRealZoneText(580),
+    ["ZA"] = GetRealZoneText(568),
+    ["SUN"] = GetRealZoneText(580)
 }
-local LOCALIZED_CLASSIC_RAID_NAMES_ONLY = {
+local LOCALIZED_WOTLK_RAID_NAMES = {
     ["ONY"] = GetRealZoneText(249),
-    ["ZG"] = GetRealZoneText(309),
-    ["MC"] = GetRealZoneText(409),
-    ["BWL"] = GetRealZoneText(469),
-    ["AQ20"] = GetRealZoneText(509),
-    ["AQ40"] = GetRealZoneText(531),
     ["NAXX"] = GetRealZoneText(533),
+    ["ULD"] = GetRealZoneText(603),
+    ["OS"] = GetRealZoneText(615),
+    ["EoE"] = GetRealZoneText(616),
+    ["VoA"] = GetRealZoneText(624),
+    ["ICC"] = GetRealZoneText(631),
+    ["ToC"] = GetRealZoneText(649),
+    ["RS"] = GetRealZoneText(724)
 }
-local LOCALIZED_TBC_RAID_NAMES_ONLY = {
-    ["KARA"] = GetRealZoneText(532),
-    ["HY"] = GetRealZoneText(534),
-    ["MAG"] = GetRealZoneText(544),
-    ["SSC"] = GetRealZoneText(548),
-    ["TK"] = GetRealZoneText(550),
-    ["BT"] = GetRealZoneText(564),
-    ["GRU"] = GetRealZoneText(565),
-    ["ZA"] = GetRealZoneText(568),	
-    ["SUN"] = GetRealZoneText(580),
-}
+
+local LOCALIZED_ALL_HEROIC_NAMES = {}
+for k, v in pairs(LOCALIZED_TBC_HEROIC_NAMES) do
+    LOCALIZED_ALL_RAID_NAMES[k] = v
+end
+for k, v in pairs(LOCALIZED_WOTLK_HEROIC_NAMES) do
+    LOCALIZED_ALL_RAID_NAMES[k] = v
+end
+
+local LOCALIZED_ALL_RAID_NAMES = {}
+for k, v in pairs(LOCALIZED_CLASSIC_RAID_NAMES) do
+    LOCALIZED_ALL_RAID_NAMES[k] = v
+end
+for k, v in pairs(LOCALIZED_TBC_RAID_NAMES) do
+    LOCALIZED_ALL_RAID_NAMES[k] = v
+end
 
 local LOCKOUT_DATA = {}
 
@@ -89,11 +144,15 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 
 function TRaidLockout_Init()
     if (myAddOnsFrame_Register) then
-		myAddOnsFrame_Register( {name=TITAN_RAIDLOCKOUT_ID,version=VERSION,category=MYADDONS_CATEGORY_PLUGINS} )
+        myAddOnsFrame_Register({
+            name = TITAN_RAIDLOCKOUT_ID,
+            version = VERSION,
+            category = MYADDONS_CATEGORY_PLUGINS
+        })
     end
 end
 
-function TRaidLockout_OnLoad(self)    
+function TRaidLockout_OnLoad(self)
     self.registry = {
         id = TITAN_RAIDLOCKOUT_ID,
         menuText = "Raid Lockout",
@@ -115,11 +174,11 @@ function TRaidLockout_OnLoad(self)
             ShowHeroicsInTooltip = true,
             ShowIcon = true,
             ShowColoredText = true,
-            ShowLabelText = true,
+            ShowLabelText = true
         }
     }
     self:RegisterEvent("ADDON_LOADED")
-    self:RegisterEvent("PLAYER_ENTERING_WORLD") 
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("UPDATE_INSTANCE_INFO")
 end
 
@@ -185,22 +244,22 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
             TitanPanelRightClickMenu_AddTitle(L["PanelOptions"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
             info = {};
-			info.text = L["ShowAllRaids"];
-			info.func = function() 
+            info.text = L["ShowAllRaids"];
+            info.func = function()
                 TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
                 TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
             end
-			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowUnlockedButton")
-			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
             info = {};
-			info.text = L["ShowLockedHeroics"];
-			info.func = function() 
+            info.text = L["ShowLockedHeroics"];
+            info.func = function()
                 TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
                 TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
             end
-			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowHeroicsButton")
-			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
         end
 
@@ -208,37 +267,37 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
             TitanPanelRightClickMenu_AddTitle(L["TooltipOptions"], _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
 
             info = {};
-			info.text = L["ShowLayoutHint"]
-			info.func = function() 
-                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader") 
+            info.text = L["ShowLayoutHint"]
+            info.func = function()
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
             end
-			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowTooltipHeader")
-			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
             info = {};
-			info.text = L["ShowNonLockedCharacters"];
-			info.func = function()
+            info.text = L["ShowNonLockedCharacters"];
+            info.func = function()
                 TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowAllCharacters")
             end
-			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowAllCharacters");
-			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
-
-            info = {};
-			info.text = L["TooltipShowClassicRaids"];
-			info.func = function() 
-                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
-            end
-			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowClassicRaidsInTooltip")
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowAllCharacters");
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
 
             info = {};
-			info.text = L["TooltipShowHeroics"];
-			info.func = function() 
+            info.text = L["TooltipShowClassicRaids"];
+            info.func = function()
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
+            end
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowClassicRaidsInTooltip")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
+
+            info = {};
+            info.text = L["TooltipShowHeroics"];
+            info.func = function()
                 TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsInTooltip")
             end
-			info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID,"ShowHeroicsInTooltip")
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsInTooltip")
 
-			L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
         end
 
         return
@@ -246,27 +305,27 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
 
     -- Level 1
     TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_RAIDLOCKOUT_ID].menuText);
-    
-    info = {};
-	info.notCheckable = true
-	info.text = L["PanelOptions"];
-	info.value = "PanelOptions"
-	info.hasArrow = 1;
-	L_UIDropDownMenu_AddButton(info);
 
     info = {};
-	info.notCheckable = true
-	info.text = L["TooltipOptions"];
-	info.value = "TooltipOptions"
-	info.hasArrow = 1;
-	L_UIDropDownMenu_AddButton(info);
-    
+    info.notCheckable = true
+    info.text = L["PanelOptions"];
+    info.value = "PanelOptions"
+    info.hasArrow = 1;
+    L_UIDropDownMenu_AddButton(info);
+
+    info = {};
+    info.notCheckable = true
+    info.text = L["TooltipOptions"];
+    info.value = "TooltipOptions"
+    info.hasArrow = 1;
+    L_UIDropDownMenu_AddButton(info);
+
     TitanPanelRightClickMenu_AddSpacer()
     TitanPanelRightClickMenu_AddToggleIcon(TITAN_RAIDLOCKOUT_ID);
     TitanPanelRightClickMenu_AddToggleColoredText(TITAN_RAIDLOCKOUT_ID)
-	TitanPanelRightClickMenu_AddToggleLabelText(TITAN_RAIDLOCKOUT_ID)
+    TitanPanelRightClickMenu_AddToggleLabelText(TITAN_RAIDLOCKOUT_ID)
     TitanPanelRightClickMenu_AddSpacer()
-	TitanPanelRightClickMenu_AddCommand(L["TITAN_PANEL_MENU_HIDE"], TITAN_RAIDLOCKOUT_ID, TITAN_PANEL_MENU_FUNC_HIDE);
+    TitanPanelRightClickMenu_AddCommand(L["TITAN_PANEL_MENU_HIDE"], TITAN_RAIDLOCKOUT_ID, TITAN_PANEL_MENU_FUNC_HIDE);
 end
 
 function TRaidLockout_UNIXTimeToDateTimeString(unixTime)
@@ -310,7 +369,7 @@ function TRaidLockout_RemoveExpiredLockoutData()
             local char = removeRow[2]
             local instance = removeRow[3]
             LOCKOUT_DATA["Players"][server][char]["Lockouts"][instance] = nil
-            LOCKOUT_DATA["Players"][server][char]["NumSaved"] = LOCKOUT_DATA["Players"][server][char]["NumSaved"] -1
+            LOCKOUT_DATA["Players"][server][char]["NumSaved"] = LOCKOUT_DATA["Players"][server][char]["NumSaved"] - 1
         end
     end
 
@@ -330,7 +389,8 @@ function TRaidLockout_UpdateLockoutData()
     -- Save character data
     LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["NumSaved"] = GetNumSavedInstances()
     for savedIndex = 1, numSaved do
-        local name, _, reset, _, _, _, _, _, _, _, numEncounters, encounterProgress, _ = GetSavedInstanceInfo(savedIndex)
+        local name, _, reset, _, _, _, _, _, _, _, numEncounters, encounterProgress, _ =
+            GetSavedInstanceInfo(savedIndex)
 
         LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"][name] = {
             ["Reset"] = reset + GetServerTime(),
@@ -347,7 +407,7 @@ end
 --  Panel button text
 -- **************************************************************************
 function TRaidLockout_SetButtonText()
-        
+
     local numSaved = GetNumSavedInstances()
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
@@ -357,48 +417,48 @@ function TRaidLockout_SetButtonText()
 
     local heroicsTableTBC = {
         -- key, subTable{ localized abbr, is locked }
-        ["BM"] =  { L["BM"], false },
-        ["SHH"] = { L["SHH"], false },
-        ["BF"] = { L["BF"], false },
-        ["HR"] = { L["HR"], false },
-        ["SV"] = { L["SV"], false },
-        ["UB"] = { L["UB"], false },
-        ["SP"] = { L["SP"], false },
-        ["ARC"] = { L["ARC"], false },
-        ["BOT"] = { L["BOT"], false },
-        ["MECH"] = { L["MECH"], false },
-        ["SL"] = { L["SL"], false },
-        ["SEH"] = { L["SEH"], false },
-        ["MT"] = { L["MT"], false },
-        ["AC"] = { L["AC"], false },
-        ["OHF"] = { L["OHF"], false },
-        ["MAT"] = { L["MAT"], false }, --P5
+        ["BM"] = {L["BM"], false},
+        ["SHH"] = {L["SHH"], false},
+        ["BF"] = {L["BF"], false},
+        ["HR"] = {L["HR"], false},
+        ["SV"] = {L["SV"], false},
+        ["UB"] = {L["UB"], false},
+        ["SP"] = {L["SP"], false},
+        ["ARC"] = {L["ARC"], false},
+        ["BOT"] = {L["BOT"], false},
+        ["MECH"] = {L["MECH"], false},
+        ["SL"] = {L["SL"], false},
+        ["SEH"] = {L["SEH"], false},
+        ["MT"] = {L["MT"], false},
+        ["AC"] = {L["AC"], false},
+        ["OHF"] = {L["OHF"], false},
+        ["MAT"] = {L["MAT"], false} -- P5
     }
 
-    local raidsTableTBC = { 
+    local raidsTableTBC = {
         -- key, subTable{ localized abbr, is locked }
-        ["KARA"] = { L["KARA"], false },
-        ["GRU"] = { L["GRU"], false },
-        ["MAG"] = { L["MAG"], false },
-        ["SSC"] = { L["SSC"], false },
-        ["TK"] = { L["TK"], false },
-        ["HY"] = { L["HY"], false },
-        ["BT"] = { L["BT"], false },
-        ["ZA"] = { L["ZA"], false },
-        ["SUN"] = { L["SUN"], false }, --P5
+        ["KARA"] = {L["KARA"], false},
+        ["GRU"] = {L["GRU"], false},
+        ["MAG"] = {L["MAG"], false},
+        ["SSC"] = {L["SSC"], false},
+        ["TK"] = {L["TK"], false},
+        ["HY"] = {L["HY"], false},
+        ["BT"] = {L["BT"], false},
+        ["ZA"] = {L["ZA"], false},
+        ["SUN"] = {L["SUN"], false} -- P5
     }
-        
+
     if showUnlocked then -- Show green abbr
-        
+
         if numSaved > 0 then
             -- Loop thru all saved instances, check if this instance in the loop is a Heroic Dungeon
             if showHeroics then
                 for savedIndex = 1, numSaved do
                     local name = GetSavedInstanceInfo(savedIndex)
-                    if TitanUtils_TableContainsValue(LOCALIZED_HEROIC_NAMES, name) then
-                        
+                    if TitanUtils_TableContainsValue(LOCALIZED_TBC_HEROIC_NAMES, name) then
+
                         for key, subTable in pairs(heroicsTableTBC) do
-                            if name == LOCALIZED_HEROIC_NAMES[key] then
+                            if name == LOCALIZED_TBC_HEROIC_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
                                 subTable[2] = true
                             end
@@ -407,8 +467,10 @@ function TRaidLockout_SetButtonText()
                     end
                 end
             end
-            
-            if coloredText then buttonText = buttonText .. COLOR.red end
+
+            if coloredText then
+                buttonText = buttonText .. COLOR.red
+            end
             -- Loop again and check if this instance in the loop is a Raid
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
@@ -426,44 +488,48 @@ function TRaidLockout_SetButtonText()
         end
 
         buttonText = buttonText .. COLOR.white
-        
-        buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |") 
-        
+
+        buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |")
+
         for index, subTable in pairs(raidsTableTBC) do
-            if not subTable[2] then buttonText = buttonText .. " " .. subTable[1] end 
+            if not subTable[2] then
+                buttonText = buttonText .. " " .. subTable[1]
+            end
         end
-    
+
     else -- Don't show green abbr
         if numSaved > 0 then
             -- Loop thru all saved instances, check if this instance in the loop is a Heroic Dungeon
             if showHeroics then
                 for savedIndex = 1, numSaved do
                     local name = GetSavedInstanceInfo(savedIndex)
-                    if TitanUtils_TableContainsValue(LOCALIZED_HEROIC_NAMES, name) then
-                        for key, subTable in pairs(heroicsTableTBC) do 
-                            if name == LOCALIZED_HEROIC_NAMES[key] then 
+                    if TitanUtils_TableContainsValue(LOCALIZED_TBC_HEROIC_NAMES, name) then
+                        for key, subTable in pairs(heroicsTableTBC) do
+                            if name == LOCALIZED_TBC_HEROIC_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
-                            end 
+                            end
                         end
                     end
                 end
             end
 
-            if coloredText then buttonText = buttonText .. COLOR.red end
+            if coloredText then
+                buttonText = buttonText .. COLOR.red
+            end
             -- Loop again and check if this instance in the loop is a Raid
             for savedIndex = 1, numSaved do
                 local name = GetSavedInstanceInfo(savedIndex)
                 if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
-                    for key, subTable in pairs(raidsTableTBC) do 
-                        if name == LOCALIZED_ALL_RAID_NAMES[key] then 
+                    for key, subTable in pairs(raidsTableTBC) do
+                        if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
-                        end 
+                        end
                     end
                 end
             end
         end
     end
-        
+
 end
 
 -- **************************************************************************
@@ -475,22 +541,24 @@ function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData,
 
     for instanceName, instanceData in pairs(charData) do
 
-        if TitanUtils_TableContainsValue(localizedInstanceTable, instanceName) then 
+        if TitanUtils_TableContainsValue(localizedInstanceTable, instanceName) then
 
             local dateToReset = TRaidLockout_UNIXTimeToDateTimeString(instanceData["Reset"])
             local encounterProgress = instanceData["Progress"]
             local numEncounters = instanceData["Encounters"]
 
             local progress = ""
-            if ( encounterProgress < numEncounters ) then
+            if (encounterProgress < numEncounters) then
                 progress = progress .. COLOR.green .. encounterProgress
             else
                 progress = progress .. COLOR.yellow .. encounterProgress
             end
 
-            resultText = resultText .. raidNameColor .. " - " .. instanceName .. COLOR.white .. " [" .. progress .. COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " \t " .. dateToReset .. "\n"
+            resultText = resultText .. raidNameColor .. " - " .. instanceName .. COLOR.white .. " [" .. progress ..
+                             COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " \t " ..
+                             dateToReset .. "\n"
         end
-            
+
     end
 
     return resultText
@@ -507,13 +575,15 @@ function TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(isPlayerChar, show
         resultText = COLOR.green .. " - " .. L["All raids and heroics are unlocked"] .. COLOR.white .. "\n"
     else
         -- Show any heroics first
-        local heroicsResultsText = TitanUtils_Ternary(showHeroicsTooltip, TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_HEROIC_NAMES, charData, COLOR.heroic), "")
+        local heroicsResultsText = TitanUtils_Ternary(showHeroicsTooltip, TRaidLockout_ToolTip_InstanceDataLoop(
+            LOCALIZED_TBC_HEROIC_NAMES, charData, COLOR.heroic), "")
 
         -- Then show any classic raids
-        local classicResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_CLASSIC_RAID_NAMES_ONLY, charData, COLOR.classic), "")
+        local classicResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
+            LOCALIZED_CLASSIC_RAID_NAMES, charData, COLOR.classic), "")
 
         -- Then show any tbc raids
-        local tbcResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_TBC_RAID_NAMES_ONLY, charData, COLOR.orange)
+        local tbcResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_TBC_RAID_NAMES, charData, COLOR.orange)
 
         resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText
     end
@@ -534,9 +604,11 @@ function TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(charServer, charName,
             return ""
         else
             if charServer == PLAYER_REALM then
-                return "\n" .. COLOR.yellow .. charName .. "\n" .. TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(false, showAllChars, numSaved, charData)
+                return "\n" .. COLOR.yellow .. charName .. "\n" ..
+                           TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(false, showAllChars, numSaved, charData)
             else
-                return "\n" .. COLOR.yellow .. charName .. "-" .. charServer .. "\n" .. TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(false, showAllChars, numSaved, charData)
+                return "\n" .. COLOR.yellow .. charName .. "-" .. charServer .. "\n" ..
+                           TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(false, showAllChars, numSaved, charData)
             end
         end
     end
@@ -546,14 +618,15 @@ end
 function TRaidLockout_SetTooltip()
 
     TRaidLockout_RemoveExpiredLockoutData()
-    
-	tooltipText = ""
+
+    tooltipText = ""
     local numSaved = GetNumSavedInstances()
     local showHeader = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowTooltipHeader")
     local headerText = ""
 
     if showHeader then
-        headerText = headerText .. COLOR.grey .. L["Instance Name [Bosses]"] .. "\t" .. COLOR.grey .. L["Reset Time"] .. "\n"
+        headerText = headerText .. COLOR.grey .. L["Instance Name [Bosses]"] .. "\t" .. COLOR.grey .. L["Reset Time"] ..
+                         "\n"
     end
 
     tooltipText = tooltipText .. headerText
@@ -561,12 +634,17 @@ function TRaidLockout_SetTooltip()
     -- :: Loop thru LOCKOUT_DATA for ToolTip in certain order for to get ordered output ::
 
     -- 1. output THIS player
-    tooltipText = tooltipText .. "\n" .. COLOR.green .. PLAYER_NAME .. COLOR.yellow .. "\n" ..  TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(true, false, LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["NumSaved"], LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"])
+    tooltipText = tooltipText .. "\n" .. COLOR.green .. PLAYER_NAME .. COLOR.yellow .. "\n" ..
+                      TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(true, false,
+            LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["NumSaved"],
+            LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"])
 
     -- 2. loop thru THIS server, skipping the player char since it's already been output
     for charName, charData in pairs(LOCKOUT_DATA["Players"][PLAYER_REALM]) do
         if charData["Lockouts"] ~= nil then
-            tooltipText = tooltipText .. TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(PLAYER_REALM, charName, charData["NumSaved"], charData["Lockouts"], false)
+            tooltipText = tooltipText ..
+                              TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(PLAYER_REALM, charName,
+                    charData["NumSaved"], charData["Lockouts"], false)
         end
     end
 
@@ -575,10 +653,12 @@ function TRaidLockout_SetTooltip()
         if serverName ~= PLAYER_REALM then
             for charName, charData in pairs(character) do
                 if charData["Lockouts"] ~= nil then
-                    tooltipText = tooltipText .. TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(serverName, charName, charData["NumSaved"], charData["Lockouts"])
+                    tooltipText = tooltipText ..
+                                      TRaidLockout_ToolTip_StringFormat_AnyCharLockouts(serverName, charName,
+                            charData["NumSaved"], charData["Lockouts"])
                 end
             end
         end
     end
-    
+
 end
