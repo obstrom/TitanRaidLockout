@@ -1,8 +1,8 @@
-## Interface: 20501
-## Title: Titan Panel Classic [|cffeda55fRaidLockout|r] |cff00aa001.2.1 TBC|r
+## Interface: 30400
+## Title: Titan Panel Classic [|cffeda55fRaidLockout|r] |cff00aa001.3.0 SNAPSHOT WoTLK|r
 ## Notes: Adds raid lockout info to Titan Panel
 ## Author: Gamut - Nethergarde Keep EU
-## Version: v1.2.1-classic-tbc
+## Version: v1.3.0-snapshot-classic-wotlk
 ## Dependencies: TitanClassic
 ## SavedVariables: SavedLockoutTable
 TitanRaidLockout.xml
