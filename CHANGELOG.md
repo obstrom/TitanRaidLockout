@@ -1,3 +1,10 @@
+### v1.3.2 WoTLK
+
+-   Bugfix: Ulduar not showing
+-   Addition: Show/hide locked 10-man raids toggle
+
+Work done by margathon
+
 ### v1.3.1 WoTLK
 
 -   Addition: Showing 10/25-man version for WoTLK raids
