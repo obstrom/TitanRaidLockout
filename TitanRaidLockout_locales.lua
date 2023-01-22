@@ -5,6 +5,7 @@ L = LibStub("AceLocale-3.0"):GetLocale("TitanClassic", true)
 L["PanelOptions"] = "Panel options" -- Settings menu option heading
 L["ShowAllRaids"] = "Show both locked/unlocked raids" -- Settings menu option
 L["ShowLockedHeroics"] = "Show locked heroics" -- Settings menu option
+L["ShowLocked10man"] = "Show locked 10mans" -- Settings menu option
 L["TooltipOptions"] = "Tooltip options" -- Settings menu option heading
 L["ShowLayoutHint"] = "Show layout hint" -- Settings menu option
 L["ShowNonLockedCharacters"] = "Show non-locked characters" -- Settings menu option
