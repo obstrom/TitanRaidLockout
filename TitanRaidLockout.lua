@@ -260,12 +260,12 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
             
             info = {};
-            info.text = L["ShowLocked10man"];
+            info.text = L["ShowLocked10manRaids"];
             info.func = function()
-                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "Show10manButton")
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
                 TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
             end
-            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "Show10manButton")
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
         end
@@ -434,7 +434,7 @@ function TRaidLockout_SetButtonText()
     local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     local showHeroics = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
-    local show10man = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "Show10manButton")
+    local show10manRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
     buttonLabel = L["Lockout: "]
     buttonText = TitanUtils_Ternary(coloredText, COLOR.orange, COLOR.white)
 
@@ -502,7 +502,7 @@ function TRaidLockout_SetButtonText()
                 end
             end
 
-            if show10man then
+            if show10manRaids then
                 if coloredText then
                     buttonText = buttonText .. COLOR.darkorange
                 end
@@ -579,7 +579,7 @@ function TRaidLockout_SetButtonText()
                 end
             end
 
-            if show10man then
+            if show10manRaids then
                 if coloredText then
                     buttonText = buttonText .. COLOR.darkorange
                 end
