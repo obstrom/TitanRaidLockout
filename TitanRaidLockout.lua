@@ -95,17 +95,6 @@ local LOCALIZED_WOTLK_RAID_NAMES = {
     ["RS"] = GetRealZoneText(724)
 }
 
-
-local LOCALIZED_WOTLK_RAID_NAMES_10 = {}
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
-    LOCALIZED_WOTLK_RAID_NAMES_10[k .. "10"] = v .. " 10"
-end
-
-local LOCALIZED_WOTLK_RAID_NAMES_25 = {}
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
-    LOCALIZED_WOTLK_RAID_NAMES_25[k .. "25"] = v .. " 25"
-end
-
 -- Collect separate heroics tables into one table
 local LOCALIZED_ALL_HEROIC_NAMES = {}
 for k, v in pairs(LOCALIZED_TBC_HEROIC_NAMES) do
@@ -123,10 +112,7 @@ end
 for k, v in pairs(LOCALIZED_TBC_RAID_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES_10) do
-    LOCALIZED_ALL_RAID_NAMES[k] = v
-end
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES_25) do
+for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
 
@@ -407,14 +393,10 @@ function TRaidLockout_UpdateLockoutData()
         local name, _, reset, difficulty, _, _, _, _, maxPlayers, _, numEncounters, encounterProgress, _ =
             GetSavedInstanceInfo(savedIndex)
 
-        if maxPlayers == 10 then
-            name = name .. " 10"
-        end
-        if maxPlayers == 25 then
-            name = name .. " 25"
-        end
-
-        LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"][name] = {
+        -- Append instance difficutly to name
+        local instanceInfo = name .. ";" .. maxPlayers .. ";" .. difficulty
+       
+        LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"][instanceInfo] = {
             ["Reset"] = reset + GetServerTime(),
             ["Progress"] = encounterProgress,
             ["Encounters"] = numEncounters
@@ -624,17 +606,30 @@ end
 -- **************************************************************************
 --  Panel tooltip
 -- **************************************************************************
-function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData, raidNameColor)
+function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData, instanceColorPrimary, instanceColorSecondary)
 
     local resultText = ""
 
-    for instanceName, instanceData in pairs(charData) do
+    for instanceNameWithDifficulty, instanceData in pairs(charData) do
+
+        local instanceName, maxPlayers, difficultyId, _ = strsplit(";", instanceNameWithDifficulty, 4)
 
         if TitanUtils_TableContainsValue(localizedInstanceTable, instanceName) then
 
             local dateToReset = TRaidLockout_UNIXTimeToDateTimeString(instanceData["Reset"])
             local encounterProgress = instanceData["Progress"]
             local numEncounters = instanceData["Encounters"]
+            local _, _, isHeroic, _, _, _, _ = GetDifficultyInfo(difficultyId)
+
+            local instanceNameColor = instanceColorPrimary
+            if (maxPlayers == "25") then
+                instanceNameColor = instanceColorSecondary
+            end
+
+            local heroicDifficultyMarker = ""
+            if (isHeroic) then
+                heroicDifficultyMarker = "H"
+            end
 
             local progress = ""
             if (encounterProgress < numEncounters) then
@@ -643,7 +638,7 @@ function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData,
                 progress = progress .. COLOR.yellow .. encounterProgress
             end
 
-            resultText = resultText .. raidNameColor .. " - " .. instanceName .. COLOR.white .. " [" .. progress ..
+            resultText = resultText .. instanceNameColor .. " - " .. instanceName .. " (" .. heroicDifficultyMarker .. maxPlayers .. ")" .. COLOR.white .. " [" .. progress ..
                              COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " \t " ..
                              dateToReset .. "\n"
         end
@@ -666,25 +661,21 @@ function TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(isPlayerChar, show
     else
         -- Show any heroics first
         local heroicsResultsText = TitanUtils_Ternary(showHeroicsTooltip, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_ALL_HEROIC_NAMES, charData, COLOR.heroic), "")
+            LOCALIZED_ALL_HEROIC_NAMES, charData, COLOR.heroic, COLOR.white), "")
 
         -- Then show any classic raids
         local classicResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_CLASSIC_RAID_NAMES, charData, COLOR.classic), "")
+            LOCALIZED_CLASSIC_RAID_NAMES, charData, COLOR.classic, COLOR.white), "")
 
         -- Then show any tbc raids
         local tbcResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_TBC_RAID_NAMES, charData, COLOR.classic), "")
+            LOCALIZED_TBC_RAID_NAMES, charData, COLOR.classic, COLOR.white), "")
 
-        -- Then show any 10man wotlk raids
-        local wotlk10ResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES_10, charData,
-            COLOR.orange)
+        -- Then show any wotlk raids
+        local wotlkResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES, charData,
+            COLOR.orange, COLOR.darkorange)
 
-        -- Then show any 25man wotlk raids
-        local wotlk25ResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES_25, charData,
-            COLOR.darkorange)
-
-        resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText .. wotlk10ResultsText .. wotlk25ResultsText
+        resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText .. wotlkResultsText
     end
 
     return resultText
@@ -761,3 +752,5 @@ function TRaidLockout_SetTooltip()
     end
 
 end
+
+function TRaidLockout_InstanceDifficultyIdInfo
