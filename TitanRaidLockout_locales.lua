@@ -6,6 +6,7 @@ L["PanelOptions"] = "Panel options" -- Settings menu option heading
 L["ShowAllRaids"] = "Show both locked/unlocked raids" -- Settings menu option
 L["ShowLockedHeroics"] = "Show locked heroics" -- Settings menu option
 L["ShowLocked10manRaids"] = "Show locked 10-man raids" -- Settings menu option
+L["ShowRaidSize"] = "Show raid size in abbreviations" -- Settings menu option
 L["TooltipOptions"] = "Tooltip options" -- Settings menu option heading
 L["ShowLayoutHint"] = "Show layout hint" -- Settings menu option
 L["ShowNonLockedCharacters"] = "Show non-locked characters" -- Settings menu option

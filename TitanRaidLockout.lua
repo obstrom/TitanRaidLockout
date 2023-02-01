@@ -152,6 +152,7 @@ function TRaidLockout_OnLoad(self)
             ShowUnlockedButton = false,
             ShowHeroicsButton = true,
             Show10manButton = true,
+            ShowRaidSize = true,
             ShowUnlockedTooltip = false,
             ShowClassicRaidsInTooltip = true,
             ShowTBCRaidsInTooltip = true,
@@ -252,6 +253,15 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
                 TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
             end
             info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+
+            info = {};
+            info.text = L["ShowRaidSize"];
+            info.func = function()
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
+                TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
+            end
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
         end
@@ -417,6 +427,7 @@ function TRaidLockout_SetButtonText()
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     local showHeroics = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
     local show10manRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
+    local showRaidSize = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
     buttonLabel = L["Lockout: "]
     buttonText = TitanUtils_Ternary(coloredText, COLOR.orange, COLOR.white)
 
@@ -455,13 +466,17 @@ function TRaidLockout_SetButtonText()
 
     
     local raidsTableWoTLK10 = {}
+    local raidsTableWoTLK25 = {}
+    
+    local raids10Label = TitanUtils_Ternary(showRaidSize, "10", "")
+    local raids25Label = TitanUtils_Ternary(showRaidSize, "25", "")
+
     for k, v in pairs(raidsTableWoTLK) do
-        raidsTableWoTLK10[k .. "10"] = {v[1], false}
+        raidsTableWoTLK10[k .. "10"] = {v[1] .. raids10Label, false}
     end
 
-    local raidsTableWoTLK25 = {}
     for k, v in pairs(raidsTableWoTLK) do
-        raidsTableWoTLK25[k .. "25"] = {v[1], false}
+        raidsTableWoTLK25[k .. "25"] = {v[1] .. raids25Label, false}
     end
 
     if showUnlocked then -- Show green abbr
