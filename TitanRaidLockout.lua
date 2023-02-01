@@ -752,5 +752,3 @@ function TRaidLockout_SetTooltip()
     end
 
 end
-
-function TRaidLockout_InstanceDifficultyIdInfo
