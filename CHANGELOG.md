@@ -1,8 +1,9 @@
-### v1.3.3-b01 WoTLK
+### v1.3.3-b02 WoTLK
 
 -   Bugfix: Fix some non-WoTLK raids not showing in panel tooltip text
--   Change: Clarified how instance size / difficulty is displayed in tooltip
+-   Change: Reworked how instance size and difficulty is displayed in tooltip
 -   Addition: Added "H" marker in tooltip to display if raid lockout is in heroic mode
+-   Addition: Added toggle setting for showing raid size in panel text abbreviations
 
 ### v1.3.2 WoTLK
 
