@@ -423,13 +423,13 @@ end
 function TRaidLockout_SetButtonText()
 
     local numSaved = GetNumSavedInstances()
-    local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
+    local showColoredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     local showHeroics = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
     local show10manRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
     local showRaidSize = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
     buttonLabel = L["Lockout: "]
-    buttonText = TitanUtils_Ternary(coloredText, COLOR.orange, COLOR.white)
+    buttonText = TitanUtils_Ternary(showColoredText, COLOR.orange, COLOR.white)
 
     local heroicsTableWoTLK = {
         -- key, subTable{ localized abbr, is locked }
@@ -467,16 +467,13 @@ function TRaidLockout_SetButtonText()
     
     local raidsTableWoTLK10 = {}
     local raidsTableWoTLK25 = {}
-    
-    local raids10Label = TitanUtils_Ternary(showRaidSize, "10", "")
-    local raids25Label = TitanUtils_Ternary(showRaidSize, "25", "")
 
     for k, v in pairs(raidsTableWoTLK) do
-        raidsTableWoTLK10[k .. "10"] = {v[1] .. raids10Label, false}
+        raidsTableWoTLK10[k] = {v[1], false}
     end
 
     for k, v in pairs(raidsTableWoTLK) do
-        raidsTableWoTLK25[k .. "25"] = {v[1] .. raids25Label, false}
+        raidsTableWoTLK25[k] = {v[1], false}
     end
 
     if showUnlocked then -- Show green abbr
@@ -500,20 +497,19 @@ function TRaidLockout_SetButtonText()
             end
 
             if show10manRaids then
-                if coloredText then
+                if showColoredText then
                     buttonText = buttonText .. COLOR.darkorange
                 end
                 -- Loop again and check if this instance in the loop is a 10man Raid
                 for savedIndex = 1, numSaved do
-                    local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
-        
-                    if maxPlayers == 10 then name = name .. " 10" end
-                    
+                    local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
+                            
                     if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
 
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
+                                if showRaidSize then buttonText = buttonText .. "10"
                                 subTable[2] = true
                             end
                         end
@@ -522,19 +518,19 @@ function TRaidLockout_SetButtonText()
                 end
             end
 
-            if coloredText then
+            if showColoredText then
                 buttonText = buttonText .. COLOR.red
             end
              -- Loop again and check if this instance in the loop is a 25man Raid
              for savedIndex = 1, numSaved do
-                local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
-    
-                if maxPlayers == 25 then name = name .. " 25" end
+                local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
                 
                 if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
+                            if showRaidSize then buttonText = buttonText .. "25"
                             subTable[2] = true
                         end
                     end
@@ -545,18 +541,23 @@ function TRaidLockout_SetButtonText()
 
         buttonText = buttonText .. COLOR.white
 
-        buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |")
+        buttonText = buttonText .. TitanUtils_Ternary(showColoredText, COLOR.green, " |")
 
-        for index, subTable in pairs(raidsTableWoTLK10) do
-            if not subTable[2] then
-                buttonText = buttonText .. " " .. subTable[1]
+        -- Render the remaining unlocked 10 and 25 WoTLK raids
+
+        if show10manRaids then
+            for index, subTable in pairs(raidsTableWoTLK10) do
+                if not subTable[2] then
+                    buttonText = buttonText .. " " .. subTable[1]
+                    if showRaidSize then buttonText = buttonText .. "10"
+                end
             end
         end
 
-        
         for index, subTable in pairs(raidsTableWoTLK25) do
             if not subTable[2] then
                 buttonText = buttonText .. " " .. subTable[1]
+                if showRaidSize then buttonText = buttonText .. "25"
             end
         end
 
@@ -577,38 +578,36 @@ function TRaidLockout_SetButtonText()
             end
 
             if show10manRaids then
-                if coloredText then
+                if showColoredText then
                     buttonText = buttonText .. COLOR.darkorange
                 end
                 -- Loop again and check if this instance in the loop is a 10man Raid
                 for savedIndex = 1, numSaved do
-                    local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
+                    local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
         
-                    if maxPlayers == 10 then name = name .. " 10" end
-
                     if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
+                                if showRaidSize then buttonText = buttonText .. "10"
                             end
                         end
                     end
                 end
             end
 
-            if coloredText then
+            if showColoredText then
                 buttonText = buttonText .. COLOR.red
             end
             -- Loop again and check if this instance in the loop is a 25man Raid
             for savedIndex = 1, numSaved do
-                local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
-    
-                if maxPlayers == 25 then name = name .. " 25" end
+                local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
 
                 if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
+                            if showRaidSize then buttonText = buttonText .. "25"
                         end
                     end
                 end
