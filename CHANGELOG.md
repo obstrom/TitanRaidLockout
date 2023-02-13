@@ -1,4 +1,4 @@
-### v1.3.3-b02 WoTLK
+### v1.3.3-b04 WoTLK
 
 -   Bugfix: Fix some non-WoTLK raids not showing in panel tooltip text
 -   Change: Reworked how instance size and difficulty is displayed in tooltip
