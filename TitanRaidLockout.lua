@@ -464,7 +464,6 @@ function TRaidLockout_SetButtonText()
         ["RS"] = {L["RS"], false}
     }
 
-    
     local raidsTableWoTLK10 = {}
     local raidsTableWoTLK25 = {}
 
@@ -504,7 +503,7 @@ function TRaidLockout_SetButtonText()
                 for savedIndex = 1, numSaved do
                     local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
                             
-                    if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                    if maxPlayers == 10 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
 
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
@@ -525,7 +524,7 @@ function TRaidLockout_SetButtonText()
              for savedIndex = 1, numSaved do
                 local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
                 
-                if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                if maxPlayers == 25 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
 
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
@@ -585,7 +584,7 @@ function TRaidLockout_SetButtonText()
                 for savedIndex = 1, numSaved do
                     local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
         
-                    if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                    if maxPlayers == 10 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
@@ -603,7 +602,7 @@ function TRaidLockout_SetButtonText()
             for savedIndex = 1, numSaved do
                 local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
 
-                if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                if maxPlayers == 25 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
