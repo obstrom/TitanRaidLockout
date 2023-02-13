@@ -509,7 +509,7 @@ function TRaidLockout_SetButtonText()
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
-                                if showRaidSize then buttonText = buttonText .. "10"
+                                if showRaidSize then buttonText = buttonText .. "10" end
                                 subTable[2] = true
                             end
                         end
@@ -530,7 +530,7 @@ function TRaidLockout_SetButtonText()
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
-                            if showRaidSize then buttonText = buttonText .. "25"
+                            if showRaidSize then buttonText = buttonText .. "25" end
                             subTable[2] = true
                         end
                     end
@@ -549,7 +549,7 @@ function TRaidLockout_SetButtonText()
             for index, subTable in pairs(raidsTableWoTLK10) do
                 if not subTable[2] then
                     buttonText = buttonText .. " " .. subTable[1]
-                    if showRaidSize then buttonText = buttonText .. "10"
+                    if showRaidSize then buttonText = buttonText .. "10" end
                 end
             end
         end
@@ -557,7 +557,7 @@ function TRaidLockout_SetButtonText()
         for index, subTable in pairs(raidsTableWoTLK25) do
             if not subTable[2] then
                 buttonText = buttonText .. " " .. subTable[1]
-                if showRaidSize then buttonText = buttonText .. "25"
+                if showRaidSize then buttonText = buttonText .. "25" end
             end
         end
 
@@ -589,7 +589,7 @@ function TRaidLockout_SetButtonText()
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
-                                if showRaidSize then buttonText = buttonText .. "10"
+                                if showRaidSize then buttonText = buttonText .. "10" end
                             end
                         end
                     end
@@ -607,7 +607,7 @@ function TRaidLockout_SetButtonText()
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
-                            if showRaidSize then buttonText = buttonText .. "25"
+                            if showRaidSize then buttonText = buttonText .. "25" end
                         end
                     end
                 end
