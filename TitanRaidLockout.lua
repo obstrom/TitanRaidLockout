@@ -95,17 +95,6 @@ local LOCALIZED_WOTLK_RAID_NAMES = {
     ["RS"] = GetRealZoneText(724)
 }
 
-
-local LOCALIZED_WOTLK_RAID_NAMES_10 = {}
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
-    LOCALIZED_WOTLK_RAID_NAMES_10[k .. "10"] = v .. " 10"
-end
-
-local LOCALIZED_WOTLK_RAID_NAMES_25 = {}
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
-    LOCALIZED_WOTLK_RAID_NAMES_25[k .. "25"] = v .. " 25"
-end
-
 -- Collect separate heroics tables into one table
 local LOCALIZED_ALL_HEROIC_NAMES = {}
 for k, v in pairs(LOCALIZED_TBC_HEROIC_NAMES) do
@@ -123,10 +112,7 @@ end
 for k, v in pairs(LOCALIZED_TBC_RAID_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES_10) do
-    LOCALIZED_ALL_RAID_NAMES[k] = v
-end
-for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES_25) do
+for k, v in pairs(LOCALIZED_WOTLK_RAID_NAMES) do
     LOCALIZED_ALL_RAID_NAMES[k] = v
 end
 
@@ -166,6 +152,7 @@ function TRaidLockout_OnLoad(self)
             ShowUnlockedButton = false,
             ShowHeroicsButton = true,
             Show10manButton = true,
+            ShowRaidSize = true,
             ShowUnlockedTooltip = false,
             ShowClassicRaidsInTooltip = true,
             ShowTBCRaidsInTooltip = true,
@@ -260,12 +247,21 @@ function TitanPanelRightClickMenu_PrepareTitanRaidLockoutMenu()
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
             
             info = {};
-            info.text = L["ShowLocked10man"];
+            info.text = L["ShowLocked10manRaids"];
             info.func = function()
-                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "Show10manButton")
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
                 TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
             end
-            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "Show10manButton")
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
+            L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
+
+            info = {};
+            info.text = L["ShowRaidSize"];
+            info.func = function()
+                TitanToggleVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
+                TitanPanelPluginHandle_OnUpdate({TITAN_RAIDLOCKOUT_ID, 1})
+            end
+            info.checked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
             L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"])
 
         end
@@ -407,14 +403,10 @@ function TRaidLockout_UpdateLockoutData()
         local name, _, reset, difficulty, _, _, _, _, maxPlayers, _, numEncounters, encounterProgress, _ =
             GetSavedInstanceInfo(savedIndex)
 
-        if maxPlayers == 10 then
-            name = name .. " 10"
-        end
-        if maxPlayers == 25 then
-            name = name .. " 25"
-        end
-
-        LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"][name] = {
+        -- Append instance difficutly to name
+        local instanceInfo = name .. ";" .. maxPlayers .. ";" .. difficulty
+       
+        LOCKOUT_DATA["Players"][PLAYER_REALM][PLAYER_NAME]["Lockouts"][instanceInfo] = {
             ["Reset"] = reset + GetServerTime(),
             ["Progress"] = encounterProgress,
             ["Encounters"] = numEncounters
@@ -431,12 +423,13 @@ end
 function TRaidLockout_SetButtonText()
 
     local numSaved = GetNumSavedInstances()
-    local coloredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
+    local showColoredText = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowColoredText")
     local showUnlocked = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowUnlockedButton")
     local showHeroics = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowHeroicsButton")
-    local show10man = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "Show10manButton")
+    local show10manRaids = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowLocked10manRaidsButton")
+    local showRaidSize = TitanGetVar(TITAN_RAIDLOCKOUT_ID, "ShowRaidSize")
     buttonLabel = L["Lockout: "]
-    buttonText = TitanUtils_Ternary(coloredText, COLOR.orange, COLOR.white)
+    buttonText = TitanUtils_Ternary(showColoredText, COLOR.orange, COLOR.white)
 
     local heroicsTableWoTLK = {
         -- key, subTable{ localized abbr, is locked }
@@ -471,15 +464,15 @@ function TRaidLockout_SetButtonText()
         ["RS"] = {L["RS"], false}
     }
 
-    
     local raidsTableWoTLK10 = {}
+    local raidsTableWoTLK25 = {}
+
     for k, v in pairs(raidsTableWoTLK) do
-        raidsTableWoTLK10[k .. "10"] = {v[1], false}
+        raidsTableWoTLK10[k] = {v[1], false}
     end
 
-    local raidsTableWoTLK25 = {}
     for k, v in pairs(raidsTableWoTLK) do
-        raidsTableWoTLK25[k .. "25"] = {v[1], false}
+        raidsTableWoTLK25[k] = {v[1], false}
     end
 
     if showUnlocked then -- Show green abbr
@@ -502,21 +495,20 @@ function TRaidLockout_SetButtonText()
                 end
             end
 
-            if show10man then
-                if coloredText then
+            if show10manRaids then
+                if showColoredText then
                     buttonText = buttonText .. COLOR.darkorange
                 end
                 -- Loop again and check if this instance in the loop is a 10man Raid
                 for savedIndex = 1, numSaved do
-                    local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
-        
-                    if maxPlayers == 10 then name = name .. " 10" end
-                    
-                    if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                    local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
+                            
+                    if maxPlayers == 10 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
 
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
+                                if showRaidSize then buttonText = buttonText .. "10" end
                                 subTable[2] = true
                             end
                         end
@@ -525,19 +517,19 @@ function TRaidLockout_SetButtonText()
                 end
             end
 
-            if coloredText then
+            if showColoredText then
                 buttonText = buttonText .. COLOR.red
             end
              -- Loop again and check if this instance in the loop is a 25man Raid
              for savedIndex = 1, numSaved do
-                local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
-    
-                if maxPlayers == 25 then name = name .. " 25" end
+                local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
                 
-                if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                if maxPlayers == 25 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
+                            if showRaidSize then buttonText = buttonText .. "25" end
                             subTable[2] = true
                         end
                     end
@@ -548,18 +540,23 @@ function TRaidLockout_SetButtonText()
 
         buttonText = buttonText .. COLOR.white
 
-        buttonText = buttonText .. TitanUtils_Ternary(coloredText, COLOR.green, " |")
+        buttonText = buttonText .. TitanUtils_Ternary(showColoredText, COLOR.green, " |")
 
-        for index, subTable in pairs(raidsTableWoTLK10) do
-            if not subTable[2] then
-                buttonText = buttonText .. " " .. subTable[1]
+        -- Render the remaining unlocked 10 and 25 WoTLK raids
+
+        if show10manRaids then
+            for index, subTable in pairs(raidsTableWoTLK10) do
+                if not subTable[2] then
+                    buttonText = buttonText .. " " .. subTable[1]
+                    if showRaidSize then buttonText = buttonText .. "10" end
+                end
             end
         end
 
-        
         for index, subTable in pairs(raidsTableWoTLK25) do
             if not subTable[2] then
                 buttonText = buttonText .. " " .. subTable[1]
+                if showRaidSize then buttonText = buttonText .. "25" end
             end
         end
 
@@ -579,39 +576,37 @@ function TRaidLockout_SetButtonText()
                 end
             end
 
-            if show10man then
-                if coloredText then
+            if show10manRaids then
+                if showColoredText then
                     buttonText = buttonText .. COLOR.darkorange
                 end
                 -- Loop again and check if this instance in the loop is a 10man Raid
                 for savedIndex = 1, numSaved do
-                    local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
+                    local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
         
-                    if maxPlayers == 10 then name = name .. " 10" end
-
-                    if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                    if maxPlayers == 10 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
                         for key, subTable in pairs(raidsTableWoTLK10) do
                             if name == LOCALIZED_ALL_RAID_NAMES[key] then
                                 buttonText = buttonText .. " " .. subTable[1]
+                                if showRaidSize then buttonText = buttonText .. "10" end
                             end
                         end
                     end
                 end
             end
 
-            if coloredText then
+            if showColoredText then
                 buttonText = buttonText .. COLOR.red
             end
             -- Loop again and check if this instance in the loop is a 25man Raid
             for savedIndex = 1, numSaved do
-                local name, _, reset, difficulty, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
-    
-                if maxPlayers == 25 then name = name .. " 25" end
+                local name, _, _, _, _, _, _, _, maxPlayers = GetSavedInstanceInfo(savedIndex)
 
-                if TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
+                if maxPlayers == 25 and TitanUtils_TableContainsValue(LOCALIZED_ALL_RAID_NAMES, name) then
                     for key, subTable in pairs(raidsTableWoTLK25) do
                         if name == LOCALIZED_ALL_RAID_NAMES[key] then
                             buttonText = buttonText .. " " .. subTable[1]
+                            if showRaidSize then buttonText = buttonText .. "25" end
                         end
                     end
                 end
@@ -624,17 +619,30 @@ end
 -- **************************************************************************
 --  Panel tooltip
 -- **************************************************************************
-function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData, raidNameColor)
+function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData, instanceColorPrimary, instanceColorSecondary)
 
     local resultText = ""
 
-    for instanceName, instanceData in pairs(charData) do
+    for instanceNameWithDifficulty, instanceData in pairs(charData) do
+
+        local instanceName, maxPlayers, difficultyId, _ = strsplit(";", instanceNameWithDifficulty, 4)
 
         if TitanUtils_TableContainsValue(localizedInstanceTable, instanceName) then
 
             local dateToReset = TRaidLockout_UNIXTimeToDateTimeString(instanceData["Reset"])
             local encounterProgress = instanceData["Progress"]
             local numEncounters = instanceData["Encounters"]
+            local _, _, isHeroic, _, _, _, _ = GetDifficultyInfo(difficultyId)
+
+            local instanceNameColor = instanceColorPrimary
+            if (maxPlayers == "25") then
+                instanceNameColor = instanceColorSecondary
+            end
+
+            local heroicDifficultyMarker = ""
+            if (isHeroic) then
+                heroicDifficultyMarker = "H"
+            end
 
             local progress = ""
             if (encounterProgress < numEncounters) then
@@ -643,7 +651,7 @@ function TRaidLockout_ToolTip_InstanceDataLoop(localizedInstanceTable, charData,
                 progress = progress .. COLOR.yellow .. encounterProgress
             end
 
-            resultText = resultText .. raidNameColor .. " - " .. instanceName .. COLOR.white .. " [" .. progress ..
+            resultText = resultText .. instanceNameColor .. " - " .. instanceName .. " (" .. heroicDifficultyMarker .. maxPlayers .. ")" .. COLOR.white .. " [" .. progress ..
                              COLOR.yellow .. "/" .. numEncounters .. COLOR.white .. "]" .. COLOR.yellow .. " \t " ..
                              dateToReset .. "\n"
         end
@@ -666,25 +674,21 @@ function TRaidLockout_ToolTip_StringFormat_PlayerCharLockouts(isPlayerChar, show
     else
         -- Show any heroics first
         local heroicsResultsText = TitanUtils_Ternary(showHeroicsTooltip, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_ALL_HEROIC_NAMES, charData, COLOR.heroic), "")
+            LOCALIZED_ALL_HEROIC_NAMES, charData, COLOR.heroic, COLOR.white), "")
 
         -- Then show any classic raids
         local classicResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_CLASSIC_RAID_NAMES, charData, COLOR.classic), "")
+            LOCALIZED_CLASSIC_RAID_NAMES, charData, COLOR.classic, COLOR.white), "")
 
         -- Then show any tbc raids
         local tbcResultsText = TitanUtils_Ternary(showClassicRaids, TRaidLockout_ToolTip_InstanceDataLoop(
-            LOCALIZED_TBC_RAID_NAMES, charData, COLOR.classic), "")
+            LOCALIZED_TBC_RAID_NAMES, charData, COLOR.classic, COLOR.white), "")
 
-        -- Then show any 10man wotlk raids
-        local wotlk10ResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES_10, charData,
-            COLOR.orange)
+        -- Then show any wotlk raids
+        local wotlkResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES, charData,
+            COLOR.orange, COLOR.darkorange)
 
-        -- Then show any 25man wotlk raids
-        local wotlk25ResultsText = TRaidLockout_ToolTip_InstanceDataLoop(LOCALIZED_WOTLK_RAID_NAMES_25, charData,
-            COLOR.darkorange)
-
-        resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText .. wotlk10ResultsText .. wotlk25ResultsText
+        resultText = resultText .. heroicsResultsText .. classicResultsText .. tbcResultsText .. wotlkResultsText
     end
 
     return resultText
