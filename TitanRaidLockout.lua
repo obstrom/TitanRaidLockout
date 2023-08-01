@@ -151,7 +151,7 @@ function TRaidLockout_OnLoad(self)
             ShowAllCharacters = false,
             ShowUnlockedButton = false,
             ShowHeroicsButton = true,
-            Show10manButton = true,
+            ShowLocked10manRaidsButton = true,
             ShowRaidSize = true,
             ShowUnlockedTooltip = false,
             ShowClassicRaidsInTooltip = true,

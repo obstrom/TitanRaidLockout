@@ -1,3 +1,7 @@
+### v1.3.4 WoTLK
+
+-   Bugfix: Fix "Show locked 10-man raids" setting not saving between logins
+
 ### v1.3.3 WoTLK
 
 -   Bugfix: Fix some non-WoTLK raids not showing in panel tooltip text
