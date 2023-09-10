@@ -1,3 +1,7 @@
+### v1.3.5 WoTLK
+
+-   Bugfix: Trial of the Crusader 10/25 raid not showing up in the bar
+
 ### v1.3.4 WoTLK
 
 -   Bugfix: Fix "Show locked 10-man raids" setting not saving between logins
