@@ -460,7 +460,7 @@ function TRaidLockout_SetButtonText()
         ["EoE"] = {L["EoE"], false},
         ["VoA"] = {L["VoA"], false},
         ["ICC"] = {L["ICC"], false},
-        ["TOC"] = {L["TOC"], false},
+        ["ToC"] = {L["ToC"], false},
         ["RS"] = {L["RS"], false}
     }
 

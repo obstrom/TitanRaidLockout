@@ -45,7 +45,7 @@ L["OS"] = "OS" -- Obsidian Sanctum
 L["EoE"] = "EoE" -- Eye of Eternity
 L["VoA"] = "VoA" -- Vault of Archavon
 L["ICC"] = "ICC" -- Icecrown Citadel
-L["TOC"] = "TOC" -- Trial of the Crusader
+L["ToC"] = "ToC" -- Trial of the Crusader
 L["RS"] = "RS" -- Ruby Sanctum
 
 -- Instance heroic dungeon abbreviations: TBC
