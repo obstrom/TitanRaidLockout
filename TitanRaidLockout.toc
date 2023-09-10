@@ -1,4 +1,4 @@
-## Interface: 30403
+## Interface: 30402
 ## Title: Titan Panel Classic [|cffeda55fRaidLockout|r] |cff00aa001.3.5-beta WoTLK|r
 ## Notes: Adds raid lockout info to Titan Panel
 ## Author: Gamut - Nethergarde Keep EU
